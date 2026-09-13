@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arsip Kasus: Investigasi Struktur Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15141a;
+    --ink-2:#1e1c24;
+    --paper:#ece3cd;
+    --paper-2:#ddd0ac;
+    --paper-line:#c7b992;
+    --text:#241f16;
+    --text-soft:#5b5340;
+    --brass:#a9873b;
+    --brass-light:#c7a75c;
+    --red:#7c2a2a;
+    --red-light:#9a3a3a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(169,135,59,0.10), transparent 45%),
+      radial-gradient(ellipse at 100% 110%, rgba(124,42,42,0.12), transparent 45%),
+      var(--ink);
+    color:var(--text);
+    font-family:'Source Serif 4', Georgia, serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:32px 16px 80px;
+  }
+  .type{ font-family:'Special Elite', 'Courier New', monospace; letter-spacing:0.02em; }
+  .wrap{ width:100%; max-width:760px; }
+
+  /* ---------- Cover ---------- */
+  #screen-cover{ text-align:center; padding-top:8vh; }
+  .badge{
+    display:inline-block; padding:6px 18px; border:1px solid var(--brass-light);
+    color:var(--brass-light); font-size:13px; border-radius:2px; margin-bottom:22px;
+  }
+  #screen-cover h1{
+    color:var(--paper); font-size:clamp(32px,6vw,52px); margin:0 0 10px; line-height:1.15;
+  }
+  #screen-cover p.sub{ color:#a79d84; font-size:17px; max-width:520px; margin:0 auto 34px; line-height:1.6; }
+  .btn{
+    font-family:'Special Elite', monospace; font-size:15px; cursor:pointer; border:none;
+    padding:14px 26px; border-radius:2px; background:var(--brass); color:#1a1408;
+    transition:transform .15s ease, background .15s ease; letter-spacing:0.02em;
+  }
+  .btn:hover{ background:var(--brass-light); transform:translateY(-1px); }
+  .btn:disabled{ background:#4a4638; color:#8b8474; cursor:not-allowed; transform:none; }
+  .btn-ghost{
+    background:transparent; border:1px solid #6b6350; color:#cfc7ab;
+  }
+  .btn-ghost:hover{ background:rgba(255,255,255,0.06); }
+  .gear-link{
+    display:block; margin:26px auto 0; background:none; border:none;
+    font-family:'Special Elite',monospace; font-size:12.5px; color:#8b8474;
+    text-decoration:underline; cursor:pointer; text-align:center;
+  }
+  .gear-link:hover{ color:#cfc7ab; }
+
+  /* ---------- Card / paper ---------- */
+  .paper-card{
+    background:var(--paper); border-radius:3px; padding:30px 34px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(0,0,0,0.05);
+    position:relative;
+  }
+  .paper-card::before{
+    content:""; position:absolute; inset:10px; border:1px solid var(--paper-line);
+    pointer-events:none; border-radius:2px;
+  }
+  .section-label{
+    font-family:'Special Elite', monospace; font-size:12.5px; color:var(--red);
+    letter-spacing:0.08em; margin:0 0 6px;
+  }
+  h2.card-title{ margin:0 0 18px; font-size:24px; color:var(--text); }
+
+  /* ---------- Selection grids ---------- */
+  .grid-btns{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:6px; }
+  .pick{
+    font-family:'Special Elite', monospace; font-size:14px; padding:10px 16px;
+    border:1px solid var(--paper-line); background:#f5eeda; color:var(--text);
+    border-radius:2px; cursor:pointer; transition:all .15s ease;
+  }
+  .pick:hover{ border-color:var(--brass); }
+  .pick.active{ background:var(--red); color:#f5eeda; border-color:var(--red); }
+  .pick .tag{ display:block; font-size:10.5px; color:var(--text-soft); margin-top:2px; font-family:'Source Serif 4',serif; }
+  .pick.active .tag{ color:#e8d9d9; }
+  .tema-block{ margin-bottom:18px; }
+  .tema-block h3{ font-size:14px; text-transform:none; color:var(--text-soft); margin:0 0 8px; font-weight:600; }
+  .divider{ height:1px; background:var(--paper-line); margin:22px 0; border:none; }
+
+  /* ---------- Case file screen ---------- */
+  .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+  .topbar .who{ color:#cfc7ab; font-size:14px; font-family:'Special Elite',monospace; }
+
+  .diorama-stage{ perspective: 900px; height:210px; margin:-6px -8px 22px; border-radius:2px; overflow:hidden;
+    background: linear-gradient(180deg, #2a2620 0%, #171410 100%); position:relative; }
+  .diorama-stage::after{ content:""; position:absolute; inset:0; box-shadow: inset 0 0 60px rgba(0,0,0,0.55); pointer-events:none; }
+  .diorama-world{ position:absolute; left:50%; top:60%; transform-style:preserve-3d; transform: translate(-50%,-50%) rotateX(52deg) rotateZ(-6deg); width:10px; height:10px; }
+  .ditem{ position:absolute; border-radius:3px; box-shadow: 0 6px 14px rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; }
+  .ditem .lbl{ font-family:'Special Elite',monospace; font-size:9.5px; color:rgba(0,0,0,0.55); transform: rotateX(-52deg) rotateZ(6deg); white-space:nowrap; }
+  .dground{ position:absolute; background:rgba(0,0,0,0.25); border-radius:6px; filter: blur(1px); }
+
+  .latar-text{ font-size:16.5px; line-height:1.75; color:var(--text); margin:0 0 18px; }
+  table.logtbl{ width:100%; border-collapse:collapse; margin-bottom:18px; font-size:14.5px; }
+  table.logtbl th{ background:var(--red); color:#f2e6e6; text-align:left; padding:8px 10px; font-weight:600; font-size:13px; }
+  table.logtbl td{ padding:8px 10px; border-bottom:1px solid var(--paper-line); }
+  table.logtbl tr:nth-child(even) td{ background:rgba(0,0,0,0.03); }
+  .loglabel{ font-size:13px; color:var(--red); font-weight:600; margin:0 0 6px; font-family:'Special Elite',monospace; }
+
+  .list-plain{ margin:0 0 18px; padding-left:20px; font-size:15.5px; color:var(--text); line-height:1.7; }
+
+  .method-note{ font-size:13.5px; color:var(--text-soft); border-left:3px solid var(--brass); padding:8px 14px; margin:4px 0 24px; background:rgba(169,135,59,0.08); }
+
+  label{ display:block; font-family:'Special Elite',monospace; font-size:13px; color:var(--text-soft); margin:0 0 6px; }
+  .field{ margin-bottom:16px; }
+  input[type=text], textarea{
+    width:100%; border:1px solid var(--paper-line); background:#f7f1e0; border-radius:2px;
+    padding:10px 12px; font-family:'Source Serif 4',serif; font-size:15px; color:var(--text); resize:vertical;
+  }
+  textarea{ min-height:84px; }
+  input:focus, textarea:focus{ outline:2px solid var(--brass); outline-offset:1px; }
+
+  .status-line{ font-size:13.5px; margin-top:10px; min-height:18px; }
+  .status-line.ok{ color:#2e6b3e; }
+  .status-line.err{ color:var(--red); }
+  .status-line.wait{ color:var(--text-soft); }
+
+  .actions-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+
+  /* ---------- Quick check / emblem ---------- */
+  .quick-panel{ margin:4px 0 24px; }
+  .quick-panel > h3{ font-size:13.5px; color:var(--red); margin:0 0 4px; letter-spacing:0.06em; }
+  .quick-panel > p.quick-desc{ font-size:13px; color:var(--text-soft); margin:0 0 14px; }
+  .quick-q{ margin-bottom:14px; padding:14px 16px; background:#f7f1e0; border:1px solid var(--paper-line); border-radius:3px; }
+  .quick-prompt{ font-size:15px; margin:0 0 10px; color:var(--text); line-height:1.5; }
+  .quick-opts{ display:flex; flex-wrap:wrap; gap:8px; }
+  .quick-opt{
+    font-family:'Source Serif 4',serif; font-size:14px; padding:8px 14px; border:1px solid var(--paper-line);
+    background:#fff; color:var(--text); border-radius:20px; cursor:pointer; transition:all .15s ease;
+  }
+  .quick-opt:hover{ border-color:var(--brass); }
+  .quick-opt.selected{ background:#fdf3d8; border-color:var(--brass); font-weight:600; }
+  .quick-opt.correct{ background:#2e6b3e; border-color:#2e6b3e; color:#fff; }
+  .quick-opt.wrong{ background:var(--red); border-color:var(--red); color:#fff; }
+  .quick-opt.disabled{ pointer-events:none; opacity:0.85; }
+  .quick-submit{ margin-top:10px; }
+  .quick-status{ font-size:13px; margin:8px 0 0; min-height:16px; }
+  .quick-status.ok{ color:#2e6b3e; }
+  .quick-status.err{ color:var(--red); }
+
+  .emblem-panel{ margin:0 0 6px; text-align:center; }
+  .emblem-card{
+    display:inline-flex; flex-direction:column; align-items:center; padding:20px 30px;
+    border-radius:6px; background:linear-gradient(180deg,#2a2620,#171410);
+    box-shadow:0 12px 30px rgba(0,0,0,0.4); animation: emblem-in .5s ease;
+  }
+  @keyframes emblem-in{ from{ transform:scale(0.7); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  .emblem-title{ font-family:'Special Elite',monospace; font-size:13px; letter-spacing:0.07em; color:#e7ddc3; margin:10px 0 2px; }
+  .emblem-sub{ font-size:12.5px; color:#a79d84; margin:0; max-width:280px; line-height:1.5; }
+
+  /* ---------- Board: reveal mode ---------- */
+  .board-intro{ font-size:14.5px; color:var(--text-soft); line-height:1.6; margin:0 0 18px; }
+  .board-list{ display:flex; flex-direction:column-reverse; gap:8px; margin-bottom:10px; min-height:4px; }
+  .board-row{
+    display:flex; align-items:center; gap:12px; padding:10px 14px; background:#f5eeda;
+    border:1px solid var(--paper-line); border-radius:3px; opacity:0; transform:translateY(14px);
+    animation: board-row-in .4s ease forwards;
+  }
+  @keyframes board-row-in{ to{ opacity:1; transform:translateY(0); } }
+  .board-rank{
+    font-family:'Special Elite',monospace; font-size:13px; color:var(--text-soft);
+    min-width:30px; text-align:center;
+  }
+  .board-name{ flex:1; font-size:15px; color:var(--text); font-weight:600; }
+  .board-badges{ display:flex; gap:5px; flex-wrap:wrap; }
+  .board-badge{
+    font-family:'Special Elite',monospace; font-size:10.5px; padding:3px 7px; border-radius:20px; color:#fff;
+    letter-spacing:0.02em;
+  }
+  .board-badge.emas{ background:#8a6d2c; }
+  .board-badge.perak{ background:#6c7075; }
+  .board-badge.perunggu{ background:#8a4d28; }
+  .board-points{ font-family:'Special Elite',monospace; font-size:13px; color:var(--red); min-width:64px; text-align:right; }
+  .board-status{ font-size:13.5px; color:var(--text-soft); margin:6px 0 14px; min-height:18px; }
+
+  .board-podium{ display:flex; align-items:flex-end; justify-content:center; gap:14px; margin:6px 0 22px; }
+  .podium-col{
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+    width:108px; padding:14px 8px 12px; border-radius:6px 6px 2px 2px; opacity:0; transform:scale(0.75);
+    animation: podium-in .45s ease forwards; background:linear-gradient(180deg,#2a2620,#171410);
+    box-shadow:0 10px 24px rgba(0,0,0,0.4);
+  }
+  @keyframes podium-in{ to{ opacity:1; transform:scale(1); } }
+  .podium-col.p1{ height:158px; order:2; }
+  .podium-col.p2{ height:128px; order:1; }
+  .podium-col.p3{ height:106px; order:3; }
+  .podium-rank{ font-family:'Special Elite',monospace; font-size:12px; color:#a79d84; margin-bottom:4px; }
+  .podium-name{ font-family:'Special Elite',monospace; font-size:12.5px; color:#e7ddc3; text-align:center; line-height:1.35; margin:6px 0 2px; }
+  .podium-points{ font-size:11.5px; color:#a79d84; }
+
+  select{
+    width:100%; border:1px solid var(--paper-line); background:#f7f1e0; border-radius:2px;
+    padding:10px 12px; font-family:'Source Serif 4',serif; font-size:15px; color:var(--text);
+  }
+
+  @media (max-width:520px){
+    .paper-card{ padding:22px 18px; }
+    .pick{ font-size:13px; padding:9px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="screen-cover" class="wrap">
+  <div class="badge type">BERKAS RAHASIA</div>
+  <h1 class="type">Arsip Kasus:<br>Investigasi Struktur Data</h1>
+  <p class="sub">Lima belas berkas kasus menunggu untuk dipecahkan. Kelompok kalian bebas memilih berkas mana pun, menelusuri jejak datanya sendiri, dan mencatat hasil investigasi di sini.</p>
+  <div class="field" style="max-width:280px;margin:0 auto 18px;text-align:left;">
+    <label for="kelas-input">Kelas</label>
+    <select id="kelas-input"></select>
+  </div>
+  <button class="btn" id="btn-mulai" disabled onclick="goTo('select')">Mulai Investigasi</button>
+  <button class="gear-link" type="button" onclick="goTo('board')">Lihat Papan Peringkat</button>
+</div>
+
+<div id="screen-select" class="wrap" style="display:none;">
+  <div class="paper-card">
+    <div class="topbar">
+      <h2 class="card-title" style="margin:0;">Pilih Berkas Kasus</h2>
+      <span class="who type" id="kelas-line"></span>
+    </div>
+
+    <div class="tema-block">
+      <h3>Kantor, Berkas yang Hilang</h3>
+      <div class="grid-btns" id="grid-kantor"></div>
+    </div>
+    <div class="tema-block">
+      <h3>Rumah Sakit, Antrian yang Diserobot</h3>
+      <div class="grid-btns" id="grid-rs"></div>
+    </div>
+    <div class="tema-block">
+      <h3>Sekolah, Uang Kas yang Hilang</h3>
+      <div class="grid-btns" id="grid-sekolah"></div>
+    </div>
+    <div class="tema-block">
+      <h3>Berkas Bonus</h3>
+      <div class="grid-btns" id="grid-bonus"></div>
+    </div>
+
+    <div class="actions-row">
+      <button class="btn" id="btn-open" disabled onclick="goTo('case')">Buka Berkas Kasus</button>
+      <button class="btn btn-ghost" onclick="goTo('board')">Lihat Papan Peringkat</button>
+      <button class="btn btn-ghost" onclick="goTo('cover')">Ganti Kelas</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-case" class="wrap" style="display:none;">
+  <div class="paper-card">
+    <div class="topbar">
+      <button class="btn btn-ghost" onclick="goTo('select')" style="padding:9px 16px;">Kembali</button>
+      <span class="who type" id="who-line"></span>
+      <button class="btn btn-ghost" onclick="goTo('board')" style="padding:9px 16px;">Papan Peringkat</button>
+    </div>
+
+    <div class="diorama-stage"><div class="diorama-world" id="diorama-mount"></div></div>
+
+    <p class="section-label type" id="case-tema-label"></p>
+    <h2 class="card-title" id="case-title"></h2>
+    <p class="latar-text" id="case-latar"></p>
+    <div id="case-extra"></div>
+
+    <div class="field">
+      <label for="kelompok-select">Kelompok</label>
+      <select id="kelompok-select"></select>
+    </div>
+    <div id="emblem-panel" class="emblem-panel"></div>
+    <div id="quick-panel" class="quick-panel"></div>
+
+    <hr class="divider">
+
+    <p class="section-label type">STATUS PENYIMPANAN</p>
+    <p class="status-line" id="status-line">Hasil kelompok akan otomatis tersimpan ke Papan Peringkat begitu semua Uji Cepat terjawab benar.</p>
+
+  </div>
+</div>
+
+<div id="screen-board" class="wrap" style="display:none;">
+  <div class="paper-card">
+    <h2 class="card-title">Papan Peringkat</h2>
+    <p class="board-intro">Peringkat dihitung dari lencana yang dikumpulkan tiap kelompok (Emas = 3 poin, Perak = 2 poin, Perunggu = 1 poin). Hasilnya dirahasiakan dulu &mdash; tekan tombol di bawah untuk mengungkapnya satu per satu, dari posisi paling bawah.</p>
+    <div class="field">
+      <label for="kelas-board-input">Kelas yang ditampilkan</label>
+      <input type="text" id="kelas-board-input" placeholder="mis. 7A">
+    </div>
+    <div id="board-podium" class="board-podium" style="display:none;"></div>
+    <div id="board-list" class="board-list"></div>
+    <p class="board-status" id="board-status"></p>
+    <div class="actions-row">
+      <button class="btn" id="btn-reveal" onclick="startReveal()">Mulai Pengungkapan</button>
+      <button class="btn btn-ghost" onclick="goTo('cover')">Kembali</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------- Data kasus ---------------- */
+const CASES = {
+  'kantor-a': {
+    tema:'kantor', temaLabel:'Kantor, Berkas yang Hilang', kelompok:1,
+    judul:'Kotak Arsip Merah',
+    latar:'Kotak Arsip Merah di kantor ini menyimpan berkas dengan aturan tumpukan: berkas yang paling akhir dimasukkan berada di posisi paling atas, dan hanya berkas paling atas yang dapat diambil. Sepanjang pagi itu, empat pegawai, Bu Rani, Pak Yusuf, Bu Sinta, dan Pak Dimas, silih berganti memasukkan dan mengambil berkas dari kotak tersebut. Menjelang siang, bagian administrasi melaporkan bahwa Berkas Gaji tidak dapat ditemukan. Sebagian catatan waktu pada log akses rusak dan tidak terbaca.',
+    logCols:['Waktu','Pegawai','Aksi','Berkas'],
+    logRows:[
+      ['07.50','Bu Rani','PUSH','Berkas Pajak'],
+      ['08.10','Pak Yusuf','PUSH','Berkas Gaji'],
+      ['08.45','Bu Sinta','POP','?'],
+      ['09.20','Pak Dimas','PUSH','Berkas Kontrak'],
+      ['10.00','???','POP','Berkas Kontrak'],
+    ],
+    quick:[
+      { prompt:'Pada baris 08.45 (Bu Sinta, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Pajak','Berkas Gaji','Berkas Kontrak'], answer:'Berkas Gaji' }
+    ],
+  },
+  'kantor-b': {
+    tema:'kantor', temaLabel:'Kantor, Berkas yang Hilang', kelompok:2,
+    judul:'Kotak Arsip Biru',
+    latar:'Kotak Arsip Biru di kantor ini menyimpan berkas dengan aturan tumpukan: berkas yang paling akhir dimasukkan berada di posisi paling atas, dan hanya berkas paling atas yang dapat diambil. Sepanjang pagi itu, empat pegawai, Pak Hendra, Bu Wulan, Pak Arif, dan Bu Citra, silih berganti memasukkan dan mengambil berkas dari kotak tersebut. Menjelang siang, bagian administrasi melaporkan bahwa Berkas Absensi tidak dapat ditemukan. Sebagian catatan waktu pada log akses rusak dan tidak terbaca.',
+    logCols:['Waktu','Pegawai','Aksi','Berkas'],
+    logRows:[
+      ['08.00','Pak Hendra','PUSH','Berkas Absensi'],
+      ['08.30','Bu Wulan','PUSH','Berkas Surat Izin'],
+      ['09.05','Pak Arif','PUSH','Berkas Nilai Siswa'],
+      ['09.40','Bu Citra','POP','?'],
+      ['10.15','???','POP','Berkas Surat Izin'],
+    ],
+    quick:[
+      { prompt:'Pada baris 09.40 (Bu Citra, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Absensi','Berkas Surat Izin','Berkas Nilai Siswa'], answer:'Berkas Nilai Siswa' }
+    ],
+  },
+  'kantor-c': {
+    tema:'kantor', temaLabel:'Kantor, Berkas yang Hilang', kelompok:3,
+    judul:'Kotak Arsip Hijau',
+    latar:'Kotak Arsip Hijau di kantor ini menyimpan berkas dengan aturan tumpukan: berkas yang paling akhir dimasukkan berada di posisi paling atas, dan hanya berkas paling atas yang dapat diambil. Sepanjang pagi itu, empat pegawai, Bu Melati, Pak Ilham, Bu Ayu, dan Pak Fajar, silih berganti memasukkan dan mengambil berkas dari kotak tersebut. Menjelang siang, bagian administrasi melaporkan bahwa Berkas Proposal tidak dapat ditemukan. Sebagian catatan waktu pada log akses rusak dan tidak terbaca.',
+    logCols:['Waktu','Pegawai','Aksi','Berkas'],
+    logRows:[
+      ['07.45','Bu Melati','PUSH','Berkas Inventaris'],
+      ['08.20','Pak Ilham','PUSH','Berkas Proposal'],
+      ['09.00','Bu Ayu','POP','?'],
+      ['09.35','Pak Fajar','PUSH','Berkas Undangan'],
+      ['10.10','???','POP','Berkas Undangan'],
+    ],
+    quick:[
+      { prompt:'Pada baris 09.00 (Bu Ayu, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Inventaris','Berkas Proposal','Berkas Undangan'], answer:'Berkas Proposal' }
+    ],
+  },
+  'kantor-d': {
+    tema:'kantor', temaLabel:'Kantor, Berkas yang Hilang', kelompok:11,
+    judul:'Kotak Arsip Ungu',
+    latar:'Kotak Arsip Ungu di kantor ini menyimpan berkas dengan aturan tumpukan: berkas yang paling akhir dimasukkan berada di posisi paling atas, dan hanya berkas paling atas yang dapat diambil. Sepanjang pagi itu, empat pegawai, Pak Bayu, Bu Retno, Pak Gilang, dan Bu Farah, silih berganti memasukkan dan mengambil berkas dari kotak tersebut. Menjelang siang, bagian administrasi melaporkan bahwa Berkas Cuti tidak dapat ditemukan. Sebagian catatan waktu pada log akses rusak dan tidak terbaca.',
+    logCols:['Waktu','Pegawai','Aksi','Berkas'],
+    logRows:[
+      ['07.55','Pak Bayu','PUSH','Berkas Cuti'],
+      ['08.25','Bu Retno','PUSH','Berkas Lembur'],
+      ['09.00','Pak Gilang','POP','?'],
+      ['09.30','Bu Farah','PUSH','Berkas Reimburse'],
+      ['10.05','???','POP','Berkas Reimburse'],
+    ],
+    quick:[
+      { prompt:'Pada baris 09.00 (Pak Gilang, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Cuti','Berkas Lembur','Berkas Reimburse'], answer:'Berkas Lembur' }
+    ],
+  },
+  'rs-a': {
+    tema:'rs', temaLabel:'Rumah Sakit, Antrian yang Diserobot', kelompok:4,
+    judul:'Antrian IGD, Varian A',
+    latar:'Ruang IGD menerapkan sistem antrian: pasien yang tiba lebih dulu seharusnya dipanggil lebih dulu. Pada pagi itu, lima pasien, Tono, Wati, Joko, Ratna, dan Bima, datang satu demi satu dan mengambil nomor antrian. Menjelang siang, salah seorang pasien mengajukan keluhan resmi karena merasa urutan pemanggilan tidak wajar.',
+    logCols:['Waktu','Pasien','Aksi','Keterangan'],
+    logRows:[
+      ['08.00','Tono','ENQUEUE','-'],
+      ['08.05','Wati','ENQUEUE','-'],
+      ['08.10','Joko','ENQUEUE','-'],
+      ['08.15','-','DEQUEUE','Tono dipanggil'],
+      ['08.18','Ratna','ENQUEUE','-'],
+      ['08.20','-','DEQUEUE','Joko dipanggil'],
+    ],
+    quick:[
+      { prompt:'Pada DEQUEUE pukul 08.20, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Wati','Joko','Ratna'], answer:'Wati' }
+    ],
+  },
+  'rs-b': {
+    tema:'rs', temaLabel:'Rumah Sakit, Antrian yang Diserobot', kelompok:5,
+    judul:'Antrian IGD, Varian B',
+    latar:'Ruang IGD menerapkan sistem antrian: pasien yang tiba lebih dulu seharusnya dipanggil lebih dulu. Pada pagi itu, lima pasien, Sari, Umar, Dewi, Galih, dan Nurul, datang satu demi satu dan mengambil nomor antrian. Menjelang siang, salah seorang pasien mengajukan keluhan resmi karena merasa urutan pemanggilan tidak wajar.',
+    logCols:['Waktu','Pasien','Aksi','Keterangan'],
+    logRows:[
+      ['09.00','Sari','ENQUEUE','-'],
+      ['09.04','Umar','ENQUEUE','-'],
+      ['09.09','Dewi','ENQUEUE','-'],
+      ['09.12','-','DEQUEUE','Sari dipanggil'],
+      ['09.16','Galih','ENQUEUE','-'],
+      ['09.19','-','DEQUEUE','Galih dipanggil'],
+    ],
+    quick:[
+      { prompt:'Pada DEQUEUE pukul 09.19, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Umar','Galih','Dewi'], answer:'Umar' }
+    ],
+  },
+  'rs-c': {
+    tema:'rs', temaLabel:'Rumah Sakit, Antrian yang Diserobot', kelompok:6,
+    judul:'Antrian IGD, Varian C',
+    latar:'Ruang IGD menerapkan sistem antrian: pasien yang tiba lebih dulu seharusnya dipanggil lebih dulu. Pada pagi itu, lima pasien, Anton, Puput, Made, Sekar, dan Dedi, datang satu demi satu dan mengambil nomor antrian. Menjelang siang, salah seorang pasien mengajukan keluhan resmi karena merasa urutan pemanggilan tidak wajar.',
+    logCols:['Waktu','Pasien','Aksi','Keterangan'],
+    logRows:[
+      ['10.00','Anton','ENQUEUE','-'],
+      ['10.03','Puput','ENQUEUE','-'],
+      ['10.07','Made','ENQUEUE','-'],
+      ['10.10','-','DEQUEUE','Anton dipanggil'],
+      ['10.14','Sekar','ENQUEUE','-'],
+      ['10.17','-','DEQUEUE','Sekar dipanggil'],
+    ],
+    quick:[
+      { prompt:'Pada DEQUEUE pukul 10.17, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Puput','Sekar','Made'], answer:'Puput' }
+    ],
+  },
+  'rs-d': {
+    tema:'rs', temaLabel:'Rumah Sakit, Antrian yang Diserobot', kelompok:12,
+    judul:'Antrian IGD, Varian D',
+    latar:'Ruang IGD menerapkan sistem antrian: pasien yang tiba lebih dulu seharusnya dipanggil lebih dulu. Pada pagi itu, lima pasien, Yoga, Intan, Rendra, Cinta, dan Bagas, datang satu demi satu dan mengambil nomor antrian. Menjelang siang, salah seorang pasien mengajukan keluhan resmi karena merasa urutan pemanggilan tidak wajar.',
+    logCols:['Waktu','Pasien','Aksi','Keterangan'],
+    logRows:[
+      ['11.00','Yoga','ENQUEUE','-'],
+      ['11.05','Intan','ENQUEUE','-'],
+      ['11.09','Rendra','ENQUEUE','-'],
+      ['11.12','-','DEQUEUE','Yoga dipanggil'],
+      ['11.16','Cinta','ENQUEUE','-'],
+      ['11.20','-','DEQUEUE','Cinta dipanggil'],
+    ],
+    quick:[
+      { prompt:'Pada DEQUEUE pukul 11.20, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Intan','Cinta','Rendra'], answer:'Intan' }
+    ],
+  },
+  'sekolah-a': {
+    tema:'sekolah', temaLabel:'Sekolah, Uang Kas yang Hilang', kelompok:7,
+    judul:'Tas dan Kotak Titipan, Varian A',
+    latar:'Di sudut kelas terdapat tumpukan tas yang disusun ke atas: tas yang diletakkan terakhir berada paling atas, dan tas yang diletakkan pertama berada paling bawah. Di meja guru ada kotak titipan HP yang berjalan seperti antrian: HP yang dititipkan lebih dulu diambil lebih dulu. Siang itu, uang kas kelas yang biasa disimpan di salah satu tas dilaporkan hilang, dan keterangan beberapa siswa tentang siapa memeriksa tas siapa lebih dulu ternyata saling bertentangan.',
+    extraLists:[
+      {label:'Urutan tas saat disusun, dari bawah ke atas', items:['Tas Rio','Tas Nadia','Tas Fajar']},
+      {label:'Urutan HP saat dititipkan, dari pertama ke terakhir', items:['HP Ica','HP Bayu']},
+    ],
+    kejadian:'Saat istirahat kedua, tas Fajar diperiksa lebih dulu, disusul tas Nadia. Namun uang kas ternyata berada di tas Rio, dan seorang siswa mengaku sempat melihat isi tas Rio sudah terbuka lebih awal, padahal posisinya di paling bawah tumpukan.',
+    quick:[
+      { prompt:'Tas mana yang janggal karena disebut sudah terbuka lebih awal, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Rio','Tas Nadia','Tas Fajar'], answer:'Tas Rio' }
+    ],
+  },
+  'sekolah-b': {
+    tema:'sekolah', temaLabel:'Sekolah, Uang Kas yang Hilang', kelompok:8,
+    judul:'Tas dan Kotak Titipan, Varian B',
+    latar:'Di sudut kelas terdapat tumpukan tas yang disusun ke atas: tas yang diletakkan terakhir berada paling atas, dan tas yang diletakkan pertama berada paling bawah. Di meja guru ada kotak titipan HP yang berjalan seperti antrian: HP yang dititipkan lebih dulu diambil lebih dulu. Siang itu, uang kas kelas yang biasa disimpan di salah satu tas dilaporkan hilang, dan keterangan beberapa siswa tentang siapa memeriksa tas siapa lebih dulu ternyata saling bertentangan.',
+    extraLists:[
+      {label:'Urutan tas saat disusun, dari bawah ke atas', items:['Tas Wisnu','Tas Lina','Tas Doni']},
+      {label:'Urutan HP saat dititipkan, dari pertama ke terakhir', items:['HP Sasa','HP Rehan']},
+    ],
+    kejadian:'Uang kas kelas disimpan di tas Wisnu. Saat digeledah, tas Doni dan Lina diperiksa lebih dulu sesuai urutan tumpukan, tapi ada laporan bahwa tas Wisnu sudah terbuka duluan sebelum dua tas di atasnya diperiksa.',
+    quick:[
+      { prompt:'Tas mana yang janggal karena disebut sudah terbuka duluan, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Wisnu','Tas Lina','Tas Doni'], answer:'Tas Wisnu' }
+    ],
+  },
+  'sekolah-c': {
+    tema:'sekolah', temaLabel:'Sekolah, Uang Kas yang Hilang', kelompok:9,
+    judul:'Tas dan Kotak Titipan, Varian C',
+    latar:'Di sudut kelas terdapat tumpukan tas yang disusun ke atas: tas yang diletakkan terakhir berada paling atas, dan tas yang diletakkan pertama berada paling bawah. Di meja guru ada kotak titipan HP yang berjalan seperti antrian: HP yang dititipkan lebih dulu diambil lebih dulu. Siang itu, uang kas kelas yang biasa disimpan di salah satu tas dilaporkan hilang, dan keterangan beberapa siswa tentang siapa memeriksa tas siapa lebih dulu ternyata saling bertentangan.',
+    extraLists:[
+      {label:'Urutan tas saat disusun, dari bawah ke atas', items:['Tas Egi','Tas Putri','Tas Anggun']},
+      {label:'Urutan HP saat dititipkan, dari pertama ke terakhir', items:['HP Zaki','HP Vina']},
+    ],
+    kejadian:'Uang kas ada di dalam tas Egi. Sesuai aturan tumpukan, tas Anggun diperiksa duluan, lalu Putri. Tapi seseorang mengaku sudah melihat isi tas Egi lebih dulu, padahal seharusnya belum bisa diakses karena masih ada dua tas di atasnya.',
+    quick:[
+      { prompt:'Tas mana yang janggal karena disebut sudah dilihat isinya lebih dulu, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Egi','Tas Putri','Tas Anggun'], answer:'Tas Egi' }
+    ],
+  },
+  'sekolah-d': {
+    tema:'sekolah', temaLabel:'Sekolah, Uang Kas yang Hilang', kelompok:13,
+    judul:'Tas dan Kotak Titipan, Varian D',
+    latar:'Di sudut kelas terdapat tumpukan tas yang disusun ke atas: tas yang diletakkan terakhir berada paling atas, dan tas yang diletakkan pertama berada paling bawah. Di meja guru ada kotak titipan HP yang berjalan seperti antrian: HP yang dititipkan lebih dulu diambil lebih dulu. Siang itu, uang kas kelas yang biasa disimpan di salah satu tas dilaporkan hilang, dan keterangan beberapa siswa tentang siapa memeriksa tas siapa lebih dulu ternyata saling bertentangan.',
+    extraLists:[
+      {label:'Urutan tas saat disusun, dari bawah ke atas', items:['Tas Hasan','Tas Mira','Tas Ojan']},
+      {label:'Urutan HP saat dititipkan, dari pertama ke terakhir', items:['HP Tia','HP Rafi']},
+    ],
+    kejadian:'Uang kas ada di dalam tas Hasan. Sesuai aturan tumpukan, tas Ojan diperiksa duluan, lalu Mira. Tapi seorang siswa mengaku sudah melihat isi tas Hasan lebih dulu, padahal seharusnya belum bisa diakses karena masih ada dua tas di atasnya.',
+    quick:[
+      { prompt:'Tas mana yang janggal karena disebut sudah dilihat isinya lebih dulu, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Hasan','Tas Mira','Tas Ojan'], answer:'Tas Hasan' }
+    ],
+  },
+  'bonus': {
+    tema:'gudang', temaLabel:'Berkas Bonus', kelompok:10,
+    judul:'Gudang Toko: Barang yang Tertukar',
+    latar:'Sebuah gudang kecil menyusun barang masuk di Rak A dengan aturan tumpukan: barang yang terakhir masuk diambil paling dulu untuk dikirim. Di sisi lain, pesanan pelanggan diproses dengan aturan antrian: pesanan yang pertama masuk dikirim paling dulu. Suatu hari, seorang pegawai baru yang belum terbiasa dengan kedua sistem ini menyebabkan satu pesanan pelanggan salah kirim barang.',
+    logs:[
+      {label:'Log Rak A (tumpukan)', cols:['Aksi','Barang'], rows:[['PUSH','Kotak 1'],['PUSH','Kotak 2'],['PUSH','Kotak 3'],['POP','?'],['PUSH','Kotak 4'],['POP','?']]},
+      {label:'Log Pesanan (antrian)', cols:['Aksi','Pelanggan'], rows:[['ENQUEUE','Pelanggan 1'],['ENQUEUE','Pelanggan 2'],['ENQUEUE','Pelanggan 3'],['DEQUEUE','?'],['ENQUEUE','Pelanggan 4'],['DEQUEUE','?']]},
+    ],
+    kejadian:'Barang yang seharusnya dikirim ke Pelanggan 3 justru terkirim ke pelanggan lain, dan sebaliknya. Beberapa kotak di Rak A juga tercatat terkirim tidak sesuai urutan yang semestinya.',
+    quick:[
+      { prompt:'Pada POP pertama di Rak A, barang apa yang seharusnya terambil?', options:['Kotak 1','Kotak 2','Kotak 3'], answer:'Kotak 3' },
+      { prompt:'Pada DEQUEUE pertama di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Pelanggan 1','Pelanggan 2','Pelanggan 3'], answer:'Pelanggan 1' },
+    ],
+  },
+  'bonus-b': {
+    tema:'gudang', temaLabel:'Berkas Bonus', kelompok:14,
+    judul:'Gudang Toko: Rak yang Berantakan',
+    latar:'Gudang cabang kedua menyusun barang masuk di Rak B dengan aturan tumpukan: barang yang terakhir masuk diambil paling dulu untuk dikirim. Pesanan pelanggan tetap diproses dengan aturan antrian: pesanan yang pertama masuk dikirim paling dulu. Suatu sore, seorang pegawai lepas yang baru bertugas mencatat beberapa pengiriman dengan urutan yang mencurigakan.',
+    logs:[
+      {label:'Log Rak B (tumpukan)', cols:['Aksi','Barang'], rows:[['PUSH','Dus A'],['PUSH','Dus B'],['PUSH','Dus C'],['PUSH','Dus D'],['POP','?'],['POP','?']]},
+      {label:'Log Pesanan (antrian)', cols:['Aksi','Pelanggan'], rows:[['ENQUEUE','Bu Wati'],['ENQUEUE','Pak Anwar'],['ENQUEUE','Bu Lastri'],['DEQUEUE','?'],['ENQUEUE','Pak Ujang'],['DEQUEUE','?']]},
+    ],
+    kejadian:'Dua dus yang seharusnya paling atas tumpukan ternyata tercatat terkirim belakangan, sementara dua pelanggan mengeluh pesanan mereka tertukar urutan pengirimannya.',
+    quick:[
+      { prompt:'Pada POP pertama di Rak B, barang apa yang seharusnya terambil?', options:['Dus B','Dus C','Dus D'], answer:'Dus D' },
+      { prompt:'Pada DEQUEUE pertama di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Bu Wati','Pak Anwar','Bu Lastri'], answer:'Bu Wati' },
+    ],
+  },
+  'bonus-c': {
+    tema:'gudang', temaLabel:'Berkas Bonus', kelompok:15,
+    judul:'Gudang Toko: Catatan yang Meragukan',
+    latar:'Gudang cabang ketiga menyusun barang masuk di Rak C dengan aturan tumpukan: barang yang terakhir masuk diambil paling dulu untuk dikirim. Pesanan pelanggan tetap diproses dengan aturan antrian: pesanan yang pertama masuk dikirim paling dulu. Pemilik toko curiga ada kesalahan pencatatan setelah menerima beberapa keluhan dalam satu hari.',
+    logs:[
+      {label:'Log Rak C (tumpukan)', cols:['Aksi','Barang'], rows:[['PUSH','Peti 1'],['PUSH','Peti 2'],['POP','?'],['PUSH','Peti 3'],['PUSH','Peti 4'],['POP','?']]},
+      {label:'Log Pesanan (antrian)', cols:['Aksi','Pelanggan'], rows:[['ENQUEUE','Toko Maju'],['ENQUEUE','Toko Sentosa'],['DEQUEUE','?'],['ENQUEUE','Toko Barokah'],['ENQUEUE','Toko Damai'],['DEQUEUE','?']]},
+    ],
+    kejadian:'Peti yang seharusnya terkirim di dua momen POP dilaporkan tertukar, dan urutan pengiriman ke dua pelanggan pertama tidak sesuai dengan catatan kedatangan pesanan mereka.',
+    quick:[
+      { prompt:'Pada POP kedua di Rak C, barang apa yang seharusnya terambil?', options:['Peti 2','Peti 3','Peti 4'], answer:'Peti 4' },
+      { prompt:'Pada DEQUEUE kedua di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Toko Sentosa','Toko Barokah','Toko Damai'], answer:'Toko Sentosa' },
+    ],
+  },
+};
+
+const TEMA_GRID = { kantor:'grid-kantor', rs:'grid-rs', sekolah:'grid-sekolah', gudang:'grid-bonus' };
+const TEMA_VARIAN_LABEL = {
+  'kantor-a':'Varian A', 'kantor-b':'Varian B', 'kantor-c':'Varian C', 'kantor-d':'Varian D',
+  'rs-a':'Varian A', 'rs-b':'Varian B', 'rs-c':'Varian C', 'rs-d':'Varian D',
+  'sekolah-a':'Varian A', 'sekolah-b':'Varian B', 'sekolah-c':'Varian C', 'sekolah-d':'Varian D',
+  'bonus':'Gudang A', 'bonus-b':'Gudang B', 'bonus-c':'Gudang C',
+};
+
+/* ---------------- State ---------------- */
+/* Disimpan lokal di browser ini saja (localStorage) — cocok untuk dipakai
+   di satu layar/proyektor. Kalau nanti perlu dipakai lintas perangkat lagi,
+   cukup ganti isi objek ini kembali memanggil window.storage. */
+const storage = {
+  async get(key){
+    const raw = localStorage.getItem(key);
+    if(raw === null) throw new Error('Kunci tidak ditemukan: ' + key);
+    return { key, value: raw };
+  },
+  async set(key, value){
+    localStorage.setItem(key, value);
+    return { key, value };
+  },
+  async delete(key){
+    localStorage.removeItem(key);
+    return { key, deleted: true };
+  },
+  async list(prefix){
+    const keys = [];
+    for(let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      if(!prefix || (k && k.startsWith(prefix))) keys.push(k);
+    }
+    return { keys };
+  }
+};
+
+const state = { kelas: localStorage.getItem('currentKelas') || '', kelompok:'', caseId:null, quiz:{ attempts:{}, solved:{}, emblem:null } };
+
+/* ---------------- Build selection screen ---------------- */
+function buildCaseGrids(){
+  Object.keys(TEMA_GRID).forEach(t => { document.getElementById(TEMA_GRID[t]).innerHTML=''; });
+  Object.keys(CASES).forEach(id => {
+    const c = CASES[id];
+    const btn = document.createElement('button');
+    btn.className = 'pick';
+    btn.dataset.case = id;
+    btn.innerHTML = TEMA_VARIAN_LABEL[id] + '<span class="tag">' + c.judul + '</span>';
+    btn.onclick = () => { state.caseId = id; refreshSelectUI(); };
+    document.getElementById(TEMA_GRID[c.tema]).appendChild(btn);
+  });
+}
+
+function refreshSelectUI(){
+  document.querySelectorAll('[data-case]').forEach(b=>{
+    b.classList.toggle('active', b.dataset.case === state.caseId);
+  });
+  document.getElementById('btn-open').disabled = !state.caseId;
+}
+
+/* ---------------- Diorama (illustration) ---------------- */
+function mountDiorama(tema){
+  const host = document.getElementById('diorama-mount');
+  host.innerHTML = '';
+  const add = (x,y,z,w,h,color,label) => {
+    const d = document.createElement('div');
+    d.className = 'ditem';
+    d.style.width = w+'px';
+    d.style.height = h+'px';
+    d.style.background = color;
+    d.style.transform = 'translate3d(' + x + 'px,' + y + 'px,' + z + 'px)';
+    if(label){ const s=document.createElement('span'); s.className='lbl'; s.textContent=label; d.appendChild(s); }
+    host.appendChild(d);
+  };
+  const ground = (x,y,w,h) => {
+    const g = document.createElement('div');
+    g.className='dground';
+    g.style.width=w+'px'; g.style.height=h+'px';
+    g.style.transform = 'translate3d(' + (x-w/2) + 'px,' + (y-h/2) + 'px,-2px)';
+    host.appendChild(g);
+  };
+
+  if(tema === 'kantor'){
+    ground(0,0,120,70);
+    const shades=['#8f3535','#a44040','#b94b4b','#c95d5d'];
+    for(let i=0;i<4;i++){ add(-30,-10,i*22,90,18,shades[i],i===0?'Kotak Arsip':null); }
+  }
+  else if(tema === 'rs'){
+    ground(10,10,200,60);
+    const shades=['#3a6ea5','#4a7fb5','#5a90c5','#6aa1d5','#7ab2e5'];
+    for(let i=0;i<5;i++){ add(-70+i*38,0,6,26,34,shades[i], i===2?'Antrian':null); }
+    add(90,-4,6,34,40,'#d8c98f','Meja');
+  }
+  else if(tema === 'sekolah'){
+    ground(-40,10,90,60);
+    const bagShades=['#6b4a2f','#7c5736','#8d653f'];
+    for(let i=0;i<3;i++){ add(-55,0,i*20,70,20,bagShades[i], i===0?'Tumpukan Tas':null); }
+    ground(60,-10,70,40);
+    add(45,-14,4,26,24,'#c9a76a','Kotak HP');
+    add(75,-14,4,26,24,'#d8b878',null);
+  }
+  else if(tema === 'gudang'){
+    ground(-45,15,90,70);
+    const shades=['#6b5a2f','#7c6a3a','#8d7a45','#9e8a50'];
+    for(let i=0;i<4;i++){ add(-60,5,i*20,80,18,shades[i], i===0?'Rak A':null); }
+    ground(55,15,150,50);
+    const qshades=['#3a6e5a','#4a7f6a','#5a907a'];
+    for(let i=0;i<3;i++){ add(10+i*40,10,6,30,26,qshades[i], i===0?'Pesanan':null); }
+  }
+}
+
+/* ---------------- Render case screen ---------------- */
+async function renderCase(){
+  const c = CASES[state.caseId];
+  document.getElementById('who-line').textContent = state.kelompok || '';
+  document.getElementById('case-tema-label').textContent = c.temaLabel.toUpperCase();
+  document.getElementById('case-title').textContent = c.judul;
+  document.getElementById('case-latar').textContent = c.latar;
+  mountDiorama(c.tema);
+
+  const extra = document.getElementById('case-extra');
+  extra.innerHTML = '';
+
+  if(c.logCols && c.logRows){
+    extra.appendChild(buildTable(c.logCols, c.logRows));
+  }
+  if(c.logs){
+    c.logs.forEach(l => {
+      const p = document.createElement('p');
+      p.className = 'loglabel';
+      p.textContent = l.label;
+      extra.appendChild(p);
+      extra.appendChild(buildTable(l.cols, l.rows));
+    });
+  }
+  if(c.extraLists){
+    c.extraLists.forEach(l => {
+      const p = document.createElement('p');
+      p.className = 'loglabel';
+      p.textContent = l.label;
+      extra.appendChild(p);
+      const ul = document.createElement('ul');
+      ul.className = 'list-plain';
+      l.items.forEach(it => { const li=document.createElement('li'); li.textContent=it; ul.appendChild(li); });
+      extra.appendChild(ul);
+    });
+  }
+  if(c.kejadian){
+    const p = document.createElement('p');
+    p.className = 'latar-text';
+    p.textContent = c.kejadian;
+    extra.appendChild(p);
+  }
+
+  buildKelompokSelect();
+  document.getElementById('status-line').textContent = STATUS_HINT_DEFAULT; document.getElementById('status-line').className = 'status-line';
+  state.quiz = state.kelompok ? await loadQuiz() : { attempts:{}, solved:{}, emblem:null };
+  renderQuick(c);
+  document.getElementById('emblem-panel').innerHTML = '';
+  if(state.quiz.emblem){ showEmblem(state.quiz.emblem); }
+  if(state.kelompok){ loadJawaban(); }
+}
+
+function buildKelompokSelect(){
+  const sel = document.getElementById('kelompok-select');
+  sel.innerHTML = '<option value="">Pilih kelompok</option>';
+  for(let i=1;i<=10;i++){
+    const opt = document.createElement('option');
+    opt.value = 'Kelompok ' + i;
+    opt.textContent = 'Kelompok ' + i;
+    sel.appendChild(opt);
+  }
+  sel.value = state.kelompok || '';
+  sel.onchange = onKelompokChange;
+  document.getElementById('who-line').textContent = (state.kelas ? state.kelas + ' / ' : '') + (state.kelompok || '');
+}
+
+/* Kelas dipilih sekali di layar depan (cover) dan dikunci untuk seluruh sesi,
+   supaya tidak ada jawaban yang salah atribusi kelas gara-gara diubah
+   di tengah pengerjaan kasus. Untuk ganti kelas, pakai tombol "Ganti Kelas". */
+function onKelasChangeCover(){
+  state.kelas = document.getElementById('kelas-input').value.trim();
+  localStorage.setItem('currentKelas', state.kelas);
+  document.getElementById('btn-mulai').disabled = !state.kelas;
+}
+
+async function onKelompokChange(){
+  state.kelompok = document.getElementById('kelompok-select').value;
+  document.getElementById('who-line').textContent = (state.kelas ? state.kelas + ' / ' : '') + (state.kelompok || '');
+  document.getElementById('status-line').textContent = STATUS_HINT_DEFAULT; document.getElementById('status-line').className = 'status-line';
+  const c = CASES[state.caseId];
+  state.quiz = state.kelompok ? await loadQuiz() : { attempts:{}, solved:{}, emblem:null };
+  renderQuick(c);
+  document.getElementById('emblem-panel').innerHTML = '';
+  if(state.quiz.emblem){ showEmblem(state.quiz.emblem); }
+  if(state.kelompok){ loadJawaban(); }
+}
+
+function buildTable(cols, rows){
+  const t = document.createElement('table');
+  t.className = 'logtbl';
+  const thead = document.createElement('tr');
+  cols.forEach(cn => { const th=document.createElement('th'); th.textContent=cn; thead.appendChild(th); });
+  t.appendChild(thead);
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    r.forEach(v => { const td=document.createElement('td'); td.textContent=v; tr.appendChild(td); });
+    t.appendChild(tr);
+  });
+  return t;
+}
+
+/* ---------------- Uji Cepat (quick check + lencana) ---------------- */
+function shuffleArr(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function renderQuick(c){
+  const panel = document.getElementById('quick-panel');
+  panel.innerHTML = '';
+  if(!c.quick || !c.quick.length) return;
+
+  const h = document.createElement('h3');
+  h.className = 'type';
+  h.textContent = 'UJI CEPAT';
+  panel.appendChild(h);
+
+  c.quick.forEach((q, i) => {
+    const qid = 'q' + i;
+    const box = document.createElement('div');
+    box.className = 'quick-q';
+
+    const p = document.createElement('p');
+    p.className = 'quick-prompt';
+    p.textContent = (i+1) + '. ' + q.prompt;
+    box.appendChild(p);
+
+    const opts = document.createElement('div');
+    opts.className = 'quick-opts';
+    if(!q._shuffled){ q._shuffled = shuffleArr(q.options.slice()); }
+    const solved = !!state.quiz.solved[qid];
+
+    q._shuffled.forEach(opt => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'quick-opt';
+      b.textContent = opt;
+      if(solved){
+        b.classList.add('disabled');
+        if(opt === q.answer) b.classList.add('correct');
+      }
+      b.addEventListener('click', () => pilihSementara(i, opt, b, opts));
+      opts.appendChild(b);
+    });
+    box.appendChild(opts);
+
+    if(!solved){
+      const submitBtn = document.createElement('button');
+      submitBtn.type = 'button';
+      submitBtn.className = 'btn quick-submit';
+      submitBtn.id = 'quick-submit-' + i;
+      submitBtn.textContent = 'Simpan Jawaban';
+      submitBtn.disabled = true;
+      submitBtn.addEventListener('click', () => submitJawaban(i, opts));
+      box.appendChild(submitBtn);
+    }
+
+    const status = document.createElement('p');
+    status.className = 'quick-status';
+    status.id = 'quick-status-' + i;
+    if(solved){ status.textContent = 'Tepat.'; status.classList.add('ok'); }
+    box.appendChild(status);
+
+    panel.appendChild(box);
+  });
+}
+
+/* Klik opsi hanya menandai pilihan (belum menyimpan, belum menilai benar/salah).
+   Penilaian, penyimpanan, dan tanda benar/salah baru terjadi saat "Simpan Jawaban". */
+function pilihSementara(i, val, btnEl, groupEl){
+  if(state.quiz.solved['q' + i]) return;
+  groupEl.querySelectorAll('.quick-opt').forEach(b => b.classList.remove('selected'));
+  btnEl.classList.add('selected');
+  groupEl.dataset.picked = val;
+  const submitBtn = document.getElementById('quick-submit-' + i);
+  if(submitBtn) submitBtn.disabled = false;
+}
+
+async function submitJawaban(i, groupEl){
+  if(!state.kelompok){
+    const status = document.getElementById('quick-status-' + i);
+    status.textContent = 'Pilih kelompok dahulu di atas.';
+    status.className = 'quick-status err';
+    return;
+  }
+  const val = groupEl.dataset.picked;
+  if(!val) return;
+
+  const c = CASES[state.caseId];
+  const q = c.quick[i];
+  const qid = 'q' + i;
+  if(state.quiz.solved[qid]) return;
+
+  const btnEl = Array.from(groupEl.querySelectorAll('.quick-opt')).find(b => b.textContent === val);
+  const submitBtn = document.getElementById('quick-submit-' + i);
+  state.quiz.attempts[qid] = (state.quiz.attempts[qid] || 0) + 1;
+  const status = document.getElementById('quick-status-' + i);
+
+  if(val === q.answer){
+    state.quiz.solved[qid] = true;
+    if(btnEl) btnEl.classList.add('correct');
+    groupEl.querySelectorAll('.quick-opt').forEach(b => b.classList.add('disabled'));
+    if(submitBtn) submitBtn.remove();
+    status.textContent = 'Tepat.';
+    status.className = 'quick-status ok';
+    await saveQuiz(state.quiz);
+    await checkEmblem();
+  } else {
+    if(btnEl) btnEl.classList.add('wrong');
+    setTimeout(() => { if(btnEl) btnEl.classList.remove('wrong', 'selected'); }, 700);
+    delete groupEl.dataset.picked;
+    if(submitBtn) submitBtn.disabled = true;
+    status.textContent = 'Belum tepat, telusuri lagi urutan datanya.';
+    status.className = 'quick-status err';
+    await saveQuiz(state.quiz);
+    await tambahKasusSalah();
+  }
+}
+
+/* Lencana & poin murni dari performa kelompok itu sendiri: langsung benar
+   tanpa salah = poin & lencana tertinggi, makin banyak salah makin turun.
+   Tidak lagi peduli kelompok keberapa yang selesai duluan. */
+/* Kesalahan dihitung bersama untuk berkas ini (lintas kelompok, dalam kelas
+   yang sama) — bukan cuma kesalahan kelompok itu sendiri. Jadi kalau kelompok
+   lain sudah pernah salah duluan di berkas ini, kelompok berikutnya yang
+   baru mengerjakannya ikut mewarisi hitungan itu meski jawabannya sendiri
+   langsung benar. */
+function kasusSalahKey(){ return 'kasusSalah:' + slugKelas() + ':' + state.caseId; }
+
+async function getKasusSalah(){
+  try{
+    const res = await storage.get(kasusSalahKey());
+    if(res && res.value){ return parseInt(res.value, 10) || 0; }
+  }catch(e){ /* belum ada kesalahan tercatat */ }
+  return 0;
+}
+
+async function tambahKasusSalah(){
+  const next = (await getKasusSalah()) + 1;
+  try{ await storage.set(kasusSalahKey(), String(next)); }catch(e){ /* koneksi bermasalah */ }
+  return next;
+}
+
+function tentukanTier(extra){
+  if(extra === 0) return 'emas';
+  if(extra <= 2) return 'perak';
+  return 'perunggu';
+}
+
+function hitungPoin(extra){
+  return Math.max(100 - extra * 15, 10);
+}
+
+async function checkEmblem(){
+  const c = CASES[state.caseId];
+  const allSolved = c.quick.every((_, i) => state.quiz.solved['q' + i]);
+  if(allSolved && !state.quiz.emblem){
+    const extra = await getKasusSalah();
+    const tier = tentukanTier(extra);
+    const poin = hitungPoin(extra);
+
+    state.quiz.emblem = tier;
+    state.quiz.extra = extra;
+    state.quiz.poin = poin;
+    await saveQuiz(state.quiz);
+    showEmblem(tier, extra, poin);
+    await simpanHasilOtomatis();
+  }
+}
+
+function emblemSVG(tier){
+  const colors = {
+    emas:{a:'#c7a75c', b:'#8a6d2c'},
+    perak:{a:'#c9ccd1', b:'#888d94'},
+    perunggu:{a:'#c98452', b:'#8a4d28'},
+  }[tier];
+  return '<svg width="80" height="92" viewBox="0 0 86 100" xmlns="http://www.w3.org/2000/svg">' +
+    '<polygon points="27,55 43,95 33,90 27,100 20,68" fill="'+colors.b+'"/>' +
+    '<polygon points="59,55 43,95 53,90 59,100 66,68" fill="'+colors.b+'"/>' +
+    '<circle cx="43" cy="42" r="34" fill="'+colors.a+'" stroke="'+colors.b+'" stroke-width="4"/>' +
+    '<circle cx="43" cy="42" r="24" fill="none" stroke="'+colors.b+'" stroke-width="2"/>' +
+    '<path d="M43 24 L48 37 L62 37 L51 46 L55 60 L43 51 L31 60 L35 46 L24 37 L38 37 Z" fill="'+colors.b+'"/>' +
+    '</svg>';
+}
+
+function showEmblem(tier, extra, poin){
+  const panel = document.getElementById('emblem-panel');
+  const names = { emas:'LENCANA DETEKTIF EMAS', perak:'LENCANA DETEKTIF PERAK', perunggu:'LENCANA DETEKTIF PERUNGGU' };
+  const p = poin !== undefined ? poin : state.quiz.poin;
+
+  const poinTxt = (p !== undefined) ? ('<p class="emblem-sub"><strong>' + p + ' poin</strong> untuk berkas ini.</p>') : '';
+
+  panel.innerHTML = '<div class="emblem-card">' + emblemSVG(tier) +
+    '<p class="emblem-title">' + names[tier] + '</p>' +
+    poinTxt +
+    '</div>';
+}
+
+function slugKelompok(){ return (state.kelompok || 'tanpa-nama').toLowerCase().replace(/\s+/g,'-'); }
+function slugKelas(){ return (state.kelas || 'tanpa-kelas').toLowerCase().replace(/\s+/g,'-'); }
+
+function quizKey(){ return 'quiz:' + slugKelas() + ':' + slugKelompok() + ':' + state.caseId; }
+
+async function loadQuiz(){
+  try{
+    const res = await storage.get(quizKey());
+    if(res && res.value){ return JSON.parse(res.value); }
+  }catch(e){ /* belum ada data tersimpan */ }
+  return { attempts:{}, solved:{}, emblem:null };
+}
+
+async function saveQuiz(q){
+  try{ await storage.set(quizKey(), JSON.stringify(q)); }
+  catch(e){ /* koneksi bermasalah, coba lagi saat aksi berikutnya */ }
+}
+
+/* ---------------- Papan Peringkat (mode pengungkapan) ---------------- */
+let boardRevealTimer = null;
+
+function resetBoardScreen(){
+  clearTimeout(boardRevealTimer);
+  const kelasBoardInput = document.getElementById('kelas-board-input');
+  if(kelasBoardInput && !kelasBoardInput.value) kelasBoardInput.value = state.kelas || '';
+  document.getElementById('board-list').innerHTML = '';
+  document.getElementById('board-podium').style.display = 'none';
+  document.getElementById('board-podium').innerHTML = '';
+  document.getElementById('board-status').textContent = '';
+  const again = document.getElementById('btn-reveal-again');
+  if(again) again.remove();
+  const btn = document.getElementById('btn-reveal');
+  btn.style.display = '';
+  btn.disabled = false;
+  btn.textContent = 'Mulai Pengungkapan';
+}
+
+async function fetchBoardRows(){
+  const kelasInput = document.getElementById('kelas-board-input');
+  const kelasSlug = ((kelasInput && kelasInput.value.trim()) || state.kelas || 'tanpa-kelas').toLowerCase().replace(/\s+/g,'-');
+  let keys = [];
+  try{
+    const res = await storage.list('jawaban:' + kelasSlug + ':');
+    keys = (res && res.keys) || [];
+  }catch(e){ keys = []; }
+
+  const raw = [];
+  for(const k of keys){
+    try{
+      const res = await storage.get(k);
+      if(res && res.value){ raw.push(JSON.parse(res.value)); }
+    }catch(e){ /* lewati entri yang gagal dibaca */ }
+  }
+
+  const POIN_LEGACY = { emas:3, perak:2, perunggu:1 }; // untuk data lama yang belum punya field 'poin'
+  const map = {};
+  raw.forEach(r => {
+    const nama = r.kelompok || 'Tanpa nama';
+    if(!map[nama]) map[nama] = { kelompok:nama, poin:0, jumlahKasus:0, lencana:{emas:0,perak:0,perunggu:0}, terakhir:null };
+    const m = map[nama];
+    m.jumlahKasus += 1;
+    const poinKasus = typeof r.poin === 'number' ? r.poin : (POIN_LEGACY[r.lencana] || 0);
+    m.poin += poinKasus;
+    if(r.lencana && m.lencana[r.lencana] !== undefined) m.lencana[r.lencana] += 1;
+    const t = r.waktu ? new Date(r.waktu) : null;
+    if(t && (!m.terakhir || t < m.terakhir)) m.terakhir = t; // lebih cepat selesai menang saat seri
+  });
+
+  return Object.values(map).sort((a,b) => {
+    if(b.poin !== a.poin) return b.poin - a.poin;
+    if(b.jumlahKasus !== a.jumlahKasus) return b.jumlahKasus - a.jumlahKasus;
+    return (a.terakhir||0) - (b.terakhir||0);
+  });
+}
+
+function badgeChips(lencana){
+  return ['emas','perak','perunggu']
+    .filter(t => lencana[t] > 0)
+    .map(t => '<span class="board-badge ' + t + '">' + t + ' &times;' + lencana[t] + '</span>')
+    .join('');
+}
+
+function appendBoardRow(rank, r){
+  const list = document.getElementById('board-list');
+  const row = document.createElement('div');
+  row.className = 'board-row';
+  row.innerHTML =
+    '<span class="board-rank">#' + rank + '</span>' +
+    '<span class="board-name">' + r.kelompok + '</span>' +
+    '<span class="board-badges">' + badgeChips(r.lencana) + '</span>' +
+    '<span class="board-points">' + r.poin + ' poin</span>';
+  list.appendChild(row); // .board-list pakai column-reverse, jadi baris baru "naik" ke atas
+}
+
+function showPodium(top3){
+  const podium = document.getElementById('board-podium');
+  podium.style.display = '';
+  podium.innerHTML = '';
+  const order = ['p2','p1','p3']; // urutan tampil visual: 2, 1, 3
+  const cardsBySlot = {};
+  top3.forEach((r, i) => { cardsBySlot['p' + (i+1)] = r; });
+  order.forEach((slot, i) => {
+    const r = cardsBySlot[slot];
+    if(!r) return;
+    const col = document.createElement('div');
+    col.className = 'podium-col ' + slot;
+    col.style.animationDelay = (i * 0.12) + 's';
+    col.innerHTML =
+      '<span class="podium-rank">#' + slot.slice(1) + '</span>' +
+      emblemSVG(slot === 'p1' ? 'emas' : slot === 'p2' ? 'perak' : 'perunggu') +
+      '<p class="podium-name">' + r.kelompok + '</p>' +
+      '<p class="podium-points">' + r.poin + ' poin</p>';
+    podium.appendChild(col);
+  });
+}
+
+async function startReveal(){
+  const btn = document.getElementById('btn-reveal');
+  const status = document.getElementById('board-status');
+  btn.disabled = true;
+  btn.textContent = 'Membuka arsip...';
+  status.textContent = '';
+
+  const rows = await fetchBoardRows();
+  if(!rows.length){
+    status.textContent = 'Belum ada kelompok yang menyimpan jawaban.';
+    btn.style.display = 'none';
+    return;
+  }
+
+  btn.style.display = 'none';
+  const total = rows.length;
+  const top3 = rows.slice(0, 3);
+  const rest = rows.slice(3).reverse(); // ungkap dari peringkat paling bawah dulu
+
+  let i = 0;
+  status.textContent = total > 3
+    ? 'Mengungkap peringkat, dimulai dari posisi paling bawah...'
+    : 'Mengungkap peringkat...';
+
+  function step(){
+    if(i < rest.length){
+      const rank = total - i;
+      appendBoardRow(rank, rest[i]);
+      i++;
+      boardRevealTimer = setTimeout(step, 550);
+    } else {
+      status.textContent = 'Dan inilah 3 besar...';
+      boardRevealTimer = setTimeout(() => {
+        showPodium(top3);
+        status.textContent = 'Papan peringkat lengkap terungkap.';
+        const again = document.createElement('button');
+        again.type = 'button';
+        again.id = 'btn-reveal-again';
+        again.className = 'btn btn-ghost';
+        again.textContent = 'Ulangi Pengungkapan';
+        again.onclick = () => { resetBoardScreen(); };
+        document.getElementById('board-status').after(again);
+      }, 500);
+    }
+  }
+  step();
+}
+
+const STATUS_HINT_DEFAULT = 'Hasil kelompok akan otomatis tersimpan ke Papan Peringkat begitu semua Uji Cepat terjawab benar.';
+
+/* ---------------- Storage jawaban ---------------- */
+function jawabanKey(){ return 'jawaban:' + slugKelas() + ':' + slugKelompok() + ':' + state.caseId; }
+
+async function loadJawaban(){
+  const st = document.getElementById('status-line');
+  st.textContent = STATUS_HINT_DEFAULT;
+  st.className = 'status-line';
+  try{
+    const res = await storage.get(jawabanKey());
+    if(res && res.value){
+      const data = JSON.parse(res.value);
+      st.textContent = 'Hasil ' + state.kelompok + ' sudah tersimpan ke Papan Peringkat (' + new Date(data.waktu).toLocaleTimeString() + ').';
+      st.className = 'status-line ok';
+    }
+  } catch(e){ /* belum ada jawaban tersimpan */ }
+}
+
+/* Dipanggil otomatis oleh checkEmblem() begitu kelompok mendapat lencana —
+   tidak lagi butuh tombol simpan manual, karena semua kelompok melihat
+   layar/proyektor yang sama. */
+async function simpanHasilOtomatis(){
+  const st = document.getElementById('status-line');
+  if(!state.kelompok) return;
+  const c = CASES[state.caseId];
+  const totalAttempts = Object.values((state.quiz && state.quiz.attempts) || {}).reduce((a,b) => a+b, 0);
+  const data = {
+    kelompok: state.kelompok,
+    kasus: state.caseId,
+    judulKasus: c ? c.judul : '',
+    lencana: (state.quiz && state.quiz.emblem) || '-',
+    poin: (state.quiz && typeof state.quiz.poin === 'number') ? state.quiz.poin : 0,
+    percobaanUjiCepat: totalAttempts,
+    waktu: new Date().toISOString(),
+  };
+  try{
+    const result = await storage.set(jawabanKey(), JSON.stringify(data));
+    if(result){
+      st.textContent = 'Hasil ' + state.kelompok + ' otomatis tersimpan ke Papan Peringkat.';
+      st.className = 'status-line ok';
+    } else {
+      st.textContent = 'Penyimpanan otomatis gagal, coba selesaikan ulang uji cepatnya.';
+      st.className = 'status-line err';
+    }
+  } catch(e){
+    st.textContent = 'Terjadi kendala saat menyimpan otomatis. Periksa penyimpanan browser.';
+    st.className = 'status-line err';
+  }
+}
+
+/* ---------------- Navigation ---------------- */
+function goTo(screen){
+  document.getElementById('screen-cover').style.display = screen==='cover' ? '' : 'none';
+  document.getElementById('screen-select').style.display = screen==='select' ? '' : 'none';
+  document.getElementById('screen-case').style.display = screen==='case' ? '' : 'none';
+  document.getElementById('screen-board').style.display = screen==='board' ? '' : 'none';
+  if(screen==='select'){ refreshSelectUI(); document.getElementById('kelas-line').textContent = state.kelas || ''; }
+  if(screen==='case'){ renderCase(); }
+  if(screen==='board'){ resetBoardScreen(); }
+  window.scrollTo(0,0);
+}
+
+function initCoverKelas(){
+  const kelasInput = document.getElementById('kelas-input');
+  kelasInput.innerHTML = '<option value="">Pilih kelas</option>';
+  for(let i=1;i<=10;i++){
+    const opt = document.createElement('option');
+    opt.value = 'X.E.' + i;
+    opt.textContent = 'X.E.' + i;
+    kelasInput.appendChild(opt);
+  }
+  kelasInput.value = state.kelas || '';
+  kelasInput.onchange = onKelasChangeCover;
+  document.getElementById('btn-mulai').disabled = !state.kelas;
+}
+
+initCoverKelas();
+buildCaseGrids();
+</script>
+</body>
+</html>
