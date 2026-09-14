@@ -272,7 +272,7 @@
 <div id="screen-cover" class="wrap">
   <div class="badge type">BERKAS RAHASIA</div>
   <h1 class="type">Arsip Kasus:<br>Investigasi Struktur Data</h1>
-  <p class="sub">Lima belas berkas kasus menunggu untuk dipecahkan. Berkas mana pun boleh dibuka lebih dulu, dan di setiap soal Uji Cepat kalian akan memilih kelompok mana yang sedang menjawab &mdash; jadi soal-soal dalam satu berkas bisa dimenangkan kelompok yang berbeda-beda.</p>
+  <p class="sub">Lima belas berkas kasus menunggu untuk dipecahkan. Berkas mana pun boleh dibuka lebih dulu, dan di setiap soal Uji Cepat kalian akan memilih kelompok mana yang sedang menjawab, jadi soal-soal dalam satu berkas bisa dimenangkan kelompok yang berbeda-beda.</p>
   <div class="field" style="max-width:280px;margin:0 auto 18px;text-align:left;">
     <label for="kelas-input">Kelas</label>
     <select id="kelas-input"></select>
@@ -340,7 +340,7 @@
 <div id="screen-board" class="wrap" style="display:none;">
   <div class="paper-card">
     <h2 class="card-title">Papan Peringkat</h2>
-    <p class="board-intro">Tiap soal Uji Cepat yang dijawab benar memberi poin untuk kelompok yang sedang menjawab saat itu. Peringkat ini merangkum total poin tiap kelompok dari seluruh soal &amp; kasus, dan baru bisa dibuka setelah semua berkas kasus tuntas. Hasilnya dirahasiakan dulu &mdash; tekan tombol di bawah untuk mengungkapnya satu per satu, dari posisi paling bawah.</p>
+    <p class="board-intro">Tiap soal Uji Cepat yang dijawab benar memberi poin untuk kelompok yang sedang menjawab saat itu. Peringkat ini merangkum total poin tiap kelompok dari seluruh soal &amp; kasus, dan baru bisa dibuka setelah semua berkas kasus tuntas. Hasilnya dirahasiakan dulu. Tekan tombol di bawah untuk mengungkapnya satu per satu, dari posisi paling bawah.</p>
     <div class="field">
       <label for="kelas-board-input">Kelas yang ditampilkan</label>
       <input type="text" id="kelas-board-input" placeholder="mis. 7A">
@@ -627,7 +627,7 @@ const TEMA_VARIAN_LABEL = {
 };
 
 /* ---------------- State ---------------- */
-/* Disimpan lokal di browser ini saja (localStorage) — cocok untuk dipakai
+/* Disimpan lokal di browser ini saja (localStorage), cocok untuk dipakai
    di satu layar/proyektor. Kalau nanti perlu dipakai lintas perangkat lagi,
    cukup ganti isi objek ini kembali memanggil window.storage. */
 const storage = {
@@ -979,7 +979,7 @@ function emblemSVG(tier){
 }
 
 /* Status tuntas sebuah kasus kini berlaku untuk seluruh kelas (satu layar
-   bersama), bukan lagi per kelompok — supaya kalau layar dimuat ulang,
+   bersama), bukan lagi per kelompok, supaya kalau layar dimuat ulang,
    kasus yang sudah tuntas tidak diminta diulang dari nol. */
 function kasusSelesaiKey(){ return 'kasusSelesai:' + slugKelas() + ':' + state.caseId; }
 
@@ -1019,7 +1019,7 @@ function renderStartGate(c){
   panel.innerHTML =
     '<h3 class="type" style="font-size:13.5px;color:var(--red);letter-spacing:0.06em;margin:0 0 10px;">UJI CEPAT</h3>' +
     '<div class="quiz-gate">' +
-      '<p style="margin:0 0 12px;">Baca dulu berkas kasus di atas. Setiap soal nanti akan menanyakan kelompok mana yang sedang menjawab &mdash; kelompoknya boleh berganti tiap soal.</p>' +
+      '<p style="margin:0 0 12px;">Baca dulu berkas kasus di atas. Setiap soal nanti akan menanyakan kelompok mana yang sedang menjawab, dan kelompoknya boleh berganti tiap soal.</p>' +
       '<button type="button" class="btn" onclick="mulaiSesiKuis(CASES[state.caseId])">Mulai Uji Cepat</button>' +
     '</div>';
 }
@@ -1050,7 +1050,7 @@ function renderQuizStep(){
   const opts = shuffleArr(q.options.slice());
   const total = s.order.length;
 
-  // Kelompok ditentukan ulang di setiap soal — belum ada yang dipilih dulu.
+  // Kelompok ditentukan ulang di setiap soal, belum ada yang dipilih dulu.
   s.currentKelompok = '';
   document.getElementById('who-line').textContent = state.kelas || '';
 
@@ -1104,8 +1104,8 @@ function renderQuizStep(){
   }, 100);
 }
 
-/* Pilihan jawaban terkunci sampai kelompok yang menjawab dipilih dulu —
-   ini yang membuat pemilihan kelompok terjadi "per soal", tepat saat mau
+/* Pilihan jawaban terkunci sampai kelompok yang menjawab dipilih dulu.
+   Ini yang membuat pemilihan kelompok terjadi "per soal", tepat saat mau
    menjawab, bukan sekali di awal kasus. */
 function setOptsEnabled(enabled){
   document.querySelectorAll('#quiz-opts2 .quiz-opt2').forEach(b => {
@@ -1125,9 +1125,9 @@ function pilihKelompokSoal(val){
    Kelompok yang menjawab dipilih ulang di setiap soal (lewat dropdown di
    atas), jadi soal-soal dalam satu kasus yang sama boleh dimenangkan
    kelompok yang berbeda-beda. Jawaban salah TIDAK langsung mengunci soal:
-   pilihan yang salah hanya dikunci satu-satu, sisanya tetap bisa dicoba —
-   oleh kelompok yang sama atau kelompok lain yang dipilih ulang di dropdown
-   — sampai jawaban benar ditemukan. Poin diberikan ke kelompok yang sedang
+   pilihan yang salah hanya dikunci satu-satu, sisanya tetap bisa dicoba,
+   oleh kelompok yang sama atau kelompok lain yang dipilih ulang di dropdown,
+   sampai jawaban benar ditemukan. Poin diberikan ke kelompok yang sedang
    dipilih PERSIS saat jawaban benar itu dipilih. Soal baru bisa dilanjutkan
    (tombol berikutnya) setelah jawaban benar dipilih.*/
 function jawabSoal(val, q, btnEl, groupEl){
@@ -1166,18 +1166,18 @@ function jawabSoal(val, q, btnEl, groupEl){
     document.getElementById('quiz-next-row').appendChild(nextBtn);
   } else {
     // Kunci hanya pilihan yang baru saja dicoba supaya tidak dipilih ulang,
-    // sisanya tetap terbuka — dropdown kelompok juga tetap aktif supaya
+    // sisanya tetap terbuka, dropdown kelompok juga tetap aktif supaya
     // kelompok lain bisa dipilih untuk mencoba lagi.
     btnEl.classList.add('locked', 'wrong');
     btnEl.disabled = true;
-    fb.textContent = kelompokAktif + ' belum tepat — coba pilihan lain atau ganti kelompok.';
+    fb.textContent = kelompokAktif + ' belum tepat, coba pilihan lain atau ganti kelompok.';
     fb.className = 'quiz-feedback err';
     sfxWrong();
   }
 }
 
 /* ---------------- Skor kelompok (akumulasi lintas soal & kasus) ----------------
-   Poin TIDAK ditampilkan langsung sebagai total — setiap kelompok hanya
+   Poin TIDAK ditampilkan langsung sebagai total. Setiap kelompok hanya
    diberi tahu ia baru saja mendapat poin untuk satu soal. Skor gabungan
    baru boleh dilihat lewat Papan Peringkat, dan itu pun baru terbuka
    setelah SELURUH kasus tuntas dijawab. */
@@ -1204,7 +1204,7 @@ async function finishQuiz(){
   await loadCaseProgressAndRender();
 
   // Popup "seluruh berkas tuntas" (dengan confetti) baru muncul kalau
-  // SEMUA kasus sudah tuntas dijawab — bukan setiap kali satu kasus selesai.
+  // SEMUA kasus sudah tuntas dijawab, bukan setiap kali satu kasus selesai.
   const selesai = await getKasusSelesaiGlobal();
   const semuaIds = Object.keys(CASES);
   const sudahSemua = semuaIds.every(id => selesai[id]);
@@ -1214,7 +1214,7 @@ async function finishQuiz(){
 }
 
 /* Muncul sekali, setelah SELURUH kasus (semua soal, semua berkas) tuntas.
-   Tidak menampilkan skor kelompok mana pun di sini — skor baru terbuka
+   Tidak menampilkan skor kelompok mana pun di sini. Skor baru terbuka
    di Papan Peringkat lewat tombol di bawah. */
 function showFinalScoreOverlay(){
   const overlay = document.getElementById('score-overlay');
@@ -1223,7 +1223,7 @@ function showFinalScoreOverlay(){
       '<p class="score-kicker type">SELURUH BERKAS TUNTAS</p>' +
       '<p class="score-title type">Semua 15 berkas kasus sudah terpecahkan!</p>' +
       emblemSVG('emas') +
-      '<p class="score-sub">Skor tiap kelompok dirahasiakan sampai sekarang — saatnya membuka Papan Peringkat.</p>' +
+      '<p class="score-sub">Skor tiap kelompok dirahasiakan sampai sekarang. Saatnya membuka Papan Peringkat.</p>' +
       '<div class="score-actions">' +
         '<button type="button" class="btn" onclick="closeScoreOverlay(); goTo(\'board\');">Buka Papan Peringkat</button>' +
         '<button type="button" class="btn btn-ghost" onclick="closeScoreOverlay();">Tutup</button>' +
@@ -1363,7 +1363,7 @@ async function startReveal(){
   step();
 }
 
-const STATUS_HINT_DEFAULT = 'Poin tiap kelompok otomatis tersimpan setelah tiap soal dijawab benar — hasil gabungannya baru terlihat di Papan Peringkat setelah semua kasus tuntas.';
+const STATUS_HINT_DEFAULT = 'Poin tiap kelompok otomatis tersimpan setelah tiap soal dijawab benar. Hasil gabungannya baru terlihat di Papan Peringkat setelah semua kasus tuntas.';
 
 /* ---------------- Navigation ---------------- */
 function goTo(screen){
