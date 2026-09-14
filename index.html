@@ -36,7 +36,7 @@
     padding:32px 16px 80px;
   }
   .type{ font-family:'Special Elite', 'Courier New', monospace; letter-spacing:0.02em; }
-  .wrap{ width:100%; max-width:760px; }
+  .wrap{ width:100%; max-width:1040px; }
 
   /* ---------- Cover ---------- */
   #screen-cover{ text-align:center; padding-top:8vh; }
@@ -93,6 +93,12 @@
   .pick.active{ background:var(--red); color:#f5eeda; border-color:var(--red); }
   .pick .tag{ display:block; font-size:10.5px; color:var(--text-soft); margin-top:2px; font-family:'Source Serif 4',serif; }
   .pick.active .tag{ color:#e8d9d9; }
+  .pick.done{ position:relative; }
+  .pick.done::after{
+    content:"✓"; position:absolute; top:-7px; right:-7px; width:16px; height:16px; border-radius:50%;
+    background:#2e6b3e; color:#fff; font-size:10px; line-height:16px; text-align:center;
+    font-family:'Special Elite',monospace; box-shadow:0 0 0 2px var(--paper);
+  }
   .tema-block{ margin-bottom:18px; }
   .tema-block h3{ font-size:14px; text-transform:none; color:var(--text-soft); margin:0 0 8px; font-weight:600; }
   .divider{ height:1px; background:var(--paper-line); margin:22px 0; border:none; }
@@ -136,36 +142,71 @@
 
   .actions-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
 
-  /* ---------- Quick check / emblem ---------- */
-  .quick-panel{ margin:4px 0 24px; }
-  .quick-panel > h3{ font-size:13.5px; color:var(--red); margin:0 0 4px; letter-spacing:0.06em; }
-  .quick-panel > p.quick-desc{ font-size:13px; color:var(--text-soft); margin:0 0 14px; }
-  .quick-q{ margin-bottom:14px; padding:14px 16px; background:#f7f1e0; border:1px solid var(--paper-line); border-radius:3px; }
-  .quick-prompt{ font-size:15px; margin:0 0 10px; color:var(--text); line-height:1.5; }
-  .quick-opts{ display:flex; flex-wrap:wrap; gap:8px; }
-  .quick-opt{
-    font-family:'Source Serif 4',serif; font-size:14px; padding:8px 14px; border:1px solid var(--paper-line);
-    background:#fff; color:var(--text); border-radius:20px; cursor:pointer; transition:all .15s ease;
+  /* ---------- Uji Cepat: kuis satu-soal-per-layar ---------- */
+  .quiz-panel{ margin:4px 0 6px; }
+  .quiz-panel > h3{ font-size:13.5px; color:var(--red); margin:0 0 10px; letter-spacing:0.06em; }
+  .quiz-gate{ font-size:14px; color:var(--text-soft); text-align:center; padding:18px 10px; background:#f7f1e0; border:1px dashed var(--paper-line); border-radius:3px; }
+  .quiz-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .quiz-progress{ font-family:'Special Elite',monospace; font-size:12px; color:var(--text-soft); }
+  .quiz-dots{ display:flex; gap:5px; flex-wrap:wrap; }
+  .quiz-dot{ width:8px; height:8px; border-radius:50%; background:var(--paper-line); }
+  .quiz-dot.done{ background:var(--brass); }
+  .quiz-dot.current{ background:var(--red); }
+  .quiz-timer{
+    font-family:'Special Elite',monospace; font-size:12.5px; color:var(--red); background:#f5eeda;
+    border:1px solid var(--paper-line); padding:4px 10px; border-radius:20px; min-width:52px; text-align:center;
   }
-  .quick-opt:hover{ border-color:var(--brass); }
-  .quick-opt.selected{ background:#fdf3d8; border-color:var(--brass); font-weight:600; }
-  .quick-opt.correct{ background:#2e6b3e; border-color:#2e6b3e; color:#fff; }
-  .quick-opt.wrong{ background:var(--red); border-color:var(--red); color:#fff; }
-  .quick-opt.disabled{ pointer-events:none; opacity:0.85; }
-  .quick-submit{ margin-top:10px; }
-  .quick-status{ font-size:13px; margin:8px 0 0; min-height:16px; }
-  .quick-status.ok{ color:#2e6b3e; }
-  .quick-status.err{ color:var(--red); }
+  .quiz-card{ background:#f7f1e0; border:1px solid var(--paper-line); border-radius:5px; padding:18px 18px 16px; }
+  .quiz-prompt2{ font-size:16px; line-height:1.55; color:var(--text); margin:0 0 14px; }
+  .quiz-opts2{ display:flex; flex-direction:column; gap:9px; }
+  .quiz-opt2{
+    text-align:left; font-family:'Source Serif 4',serif; font-size:15px; padding:12px 16px;
+    border:1.5px solid var(--paper-line); background:#fff; color:var(--text); border-radius:6px;
+    cursor:pointer; transition:all .12s ease;
+  }
+  .quiz-opt2:hover:not(.locked){ border-color:var(--brass); background:#fffdf5; }
+  .quiz-opt2.correct{ background:#2e6b3e; border-color:#2e6b3e; color:#fff; font-weight:600; }
+  .quiz-opt2.wrong{ background:var(--red); border-color:var(--red); color:#fff; }
+  .quiz-opt2.locked{ pointer-events:none; opacity:0.75; }
+  .quiz-opt2.locked.correct, .quiz-opt2.locked.wrong{ opacity:1; }
+  .quiz-opt2:disabled:not(.locked){ opacity:0.4; cursor:not-allowed; }
+  .quiz-feedback{ font-size:13px; margin:12px 0 0; min-height:16px; font-family:'Special Elite',monospace; }
+  .quiz-feedback.ok{ color:#2e6b3e; }
+  .quiz-feedback.err{ color:var(--red); }
+  .quiz-next-row{ margin-top:14px; text-align:right; }
+  .quiz-done-card{ background:#f7f1e0; border:1px dashed var(--brass); border-radius:5px; padding:18px 18px; text-align:center; }
+  .quiz-done-card p{ margin:0 0 4px; font-size:15px; color:var(--text); }
 
-  .emblem-panel{ margin:0 0 6px; text-align:center; }
-  .emblem-card{
-    display:inline-flex; flex-direction:column; align-items:center; padding:20px 30px;
-    border-radius:6px; background:linear-gradient(180deg,#2a2620,#171410);
-    box-shadow:0 12px 30px rgba(0,0,0,0.4); animation: emblem-in .5s ease;
+  /* ---------- Layar skor akhir (gaya kuis, dengan confetti) ---------- */
+  .score-overlay{
+    position:fixed; inset:0; background:rgba(10,9,7,0.88); display:flex; align-items:center;
+    justify-content:center; z-index:50; padding:20px;
   }
-  @keyframes emblem-in{ from{ transform:scale(0.7); opacity:0; } to{ transform:scale(1); opacity:1; } }
-  .emblem-title{ font-family:'Special Elite',monospace; font-size:13px; letter-spacing:0.07em; color:#e7ddc3; margin:10px 0 2px; }
-  .emblem-sub{ font-size:12.5px; color:#a79d84; margin:0; max-width:280px; line-height:1.5; }
+  .score-overlay[hidden]{ display:none; }
+  .score-card{
+    background:linear-gradient(180deg,#2a2620,#171410); border-radius:10px; padding:32px 28px 26px;
+    max-width:380px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.6);
+    position:relative; overflow:hidden; animation:score-in .45s ease;
+  }
+  @keyframes score-in{ from{ transform:scale(0.82); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  .score-kicker{ font-family:'Special Elite',monospace; font-size:11.5px; letter-spacing:0.1em; color:#a79d84; margin:0 0 6px; }
+  .score-title{ font-family:'Special Elite',monospace; font-size:19px; color:#e7ddc3; margin:0 0 10px; line-height:1.3; }
+  .score-num{ font-size:42px; font-weight:700; color:var(--brass-light); margin:6px 0 0; font-family:'Special Elite',monospace; }
+  .score-sub{ font-size:13px; color:#cfc7ab; margin:2px 0 18px; }
+  .score-stats{ display:flex; justify-content:center; gap:24px; margin-bottom:20px; }
+  .score-stat b{ display:block; font-size:17px; color:#e7ddc3; }
+  .score-stat span{ font-size:10.5px; color:#a79d84; letter-spacing:0.04em; }
+  .score-actions{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .confetti-piece{ position:absolute; top:-12px; width:7px; height:13px; opacity:0.9; animation:confetti-fall linear forwards; pointer-events:none; }
+  @keyframes confetti-fall{ to{ transform:translateY(440px) rotate(560deg); opacity:0; } }
+
+  /* ---------- Tombol suara (persisten di semua layar) ---------- */
+  .sound-toggle{
+    position:fixed; top:12px; right:12px; z-index:40; width:36px; height:36px; border-radius:50%;
+    border:1px solid #6b6350; background:rgba(21,20,26,0.55); color:#cfc7ab; font-size:15px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(2px);
+  }
+  .sound-toggle:hover{ background:rgba(21,20,26,0.8); }
 
   /* ---------- Board: reveal mode ---------- */
   .board-intro{ font-size:14.5px; color:var(--text-soft); line-height:1.6; margin:0 0 18px; }
@@ -216,20 +257,28 @@
     .paper-card{ padding:22px 18px; }
     .pick{ font-size:13px; padding:9px 12px; }
   }
+
+  @media (min-width:760px){
+    .paper-card{ padding:34px 44px; }
+    .quiz-opts2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .quiz-prompt2{ font-size:17.5px; }
+  }
 </style>
 </head>
 <body>
 
+<button type="button" id="sound-toggle" class="sound-toggle" onclick="toggleSound()" title="Aktifkan/matikan suara">🔊</button>
+
 <div id="screen-cover" class="wrap">
   <div class="badge type">BERKAS RAHASIA</div>
   <h1 class="type">Arsip Kasus:<br>Investigasi Struktur Data</h1>
-  <p class="sub">Lima belas berkas kasus menunggu untuk dipecahkan. Kelompok kalian bebas memilih berkas mana pun, menelusuri jejak datanya sendiri, dan mencatat hasil investigasi di sini.</p>
+  <p class="sub">Lima belas berkas kasus menunggu untuk dipecahkan. Berkas mana pun boleh dibuka lebih dulu, dan di setiap soal Uji Cepat kalian akan memilih kelompok mana yang sedang menjawab &mdash; jadi soal-soal dalam satu berkas bisa dimenangkan kelompok yang berbeda-beda.</p>
   <div class="field" style="max-width:280px;margin:0 auto 18px;text-align:left;">
     <label for="kelas-input">Kelas</label>
     <select id="kelas-input"></select>
   </div>
   <button class="btn" id="btn-mulai" disabled onclick="goTo('select')">Mulai Investigasi</button>
-  <button class="gear-link" type="button" onclick="goTo('board')">Lihat Papan Peringkat</button>
+  <button class="gear-link" type="button" onclick="goTo('board')">Data tersimpan</button>
 </div>
 
 <div id="screen-select" class="wrap" style="display:none;">
@@ -238,6 +287,7 @@
       <h2 class="card-title" style="margin:0;">Pilih Berkas Kasus</h2>
       <span class="who type" id="kelas-line"></span>
     </div>
+    <p class="board-status" id="select-progress-line" style="margin:-10px 0 16px;"></p>
 
     <div class="tema-block">
       <h3>Kantor, Berkas yang Hilang</h3>
@@ -258,7 +308,6 @@
 
     <div class="actions-row">
       <button class="btn" id="btn-open" disabled onclick="goTo('case')">Buka Berkas Kasus</button>
-      <button class="btn btn-ghost" onclick="goTo('board')">Lihat Papan Peringkat</button>
       <button class="btn btn-ghost" onclick="goTo('cover')">Ganti Kelas</button>
     </div>
   </div>
@@ -269,7 +318,6 @@
     <div class="topbar">
       <button class="btn btn-ghost" onclick="goTo('select')" style="padding:9px 16px;">Kembali</button>
       <span class="who type" id="who-line"></span>
-      <button class="btn btn-ghost" onclick="goTo('board')" style="padding:9px 16px;">Papan Peringkat</button>
     </div>
 
     <div class="diorama-stage"><div class="diorama-world" id="diorama-mount"></div></div>
@@ -279,17 +327,12 @@
     <p class="latar-text" id="case-latar"></p>
     <div id="case-extra"></div>
 
-    <div class="field">
-      <label for="kelompok-select">Kelompok</label>
-      <select id="kelompok-select"></select>
-    </div>
-    <div id="emblem-panel" class="emblem-panel"></div>
-    <div id="quick-panel" class="quick-panel"></div>
+    <div id="quiz-panel" class="quiz-panel"></div>
 
     <hr class="divider">
 
     <p class="section-label type">STATUS PENYIMPANAN</p>
-    <p class="status-line" id="status-line">Hasil kelompok akan otomatis tersimpan ke Papan Peringkat begitu semua Uji Cepat terjawab benar.</p>
+    <p class="status-line" id="status-line">Hasil kelompok otomatis tersimpan setelah Uji Cepat selesai dijawab.</p>
 
   </div>
 </div>
@@ -297,7 +340,7 @@
 <div id="screen-board" class="wrap" style="display:none;">
   <div class="paper-card">
     <h2 class="card-title">Papan Peringkat</h2>
-    <p class="board-intro">Peringkat dihitung dari lencana yang dikumpulkan tiap kelompok (Emas = 3 poin, Perak = 2 poin, Perunggu = 1 poin). Hasilnya dirahasiakan dulu &mdash; tekan tombol di bawah untuk mengungkapnya satu per satu, dari posisi paling bawah.</p>
+    <p class="board-intro">Tiap soal Uji Cepat yang dijawab benar memberi poin untuk kelompok yang sedang menjawab saat itu. Peringkat ini merangkum total poin tiap kelompok dari seluruh soal &amp; kasus, dan baru bisa dibuka setelah semua berkas kasus tuntas. Hasilnya dirahasiakan dulu &mdash; tekan tombol di bawah untuk mengungkapnya satu per satu, dari posisi paling bawah.</p>
     <div class="field">
       <label for="kelas-board-input">Kelas yang ditampilkan</label>
       <input type="text" id="kelas-board-input" placeholder="mis. 7A">
@@ -311,6 +354,8 @@
     </div>
   </div>
 </div>
+
+<div id="score-overlay" class="score-overlay" hidden></div>
 
 <script>
 /* ---------------- Data kasus ---------------- */
@@ -328,7 +373,9 @@ const CASES = {
       ['10.00','???','POP','Berkas Kontrak'],
     ],
     quick:[
-      { prompt:'Pada baris 08.45 (Bu Sinta, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Pajak','Berkas Gaji','Berkas Kontrak'], answer:'Berkas Gaji' }
+      { prompt:'Pada baris 08.45 (Bu Sinta, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Pajak','Berkas Gaji','Berkas Kontrak'], answer:'Berkas Gaji' },
+      { prompt:'Setelah seluruh log Kotak Arsip Merah ini dicatat, berkas apa yang MASIH tersisa di dalam kotak?', options:['Berkas Pajak','Berkas Gaji','Berkas Kontrak'], answer:'Berkas Pajak' },
+      { prompt:'Kotak Arsip Merah menerapkan aturan tumpukan (stack). Jika Berkas Gaji dimasukkan tepat sebelum diambil, berkas itu akan menjadi berkas yang...', options:['pertama diambil','terakhir diambil','tidak akan pernah diambil'], answer:'pertama diambil' },
     ],
   },
   'kantor-b': {
@@ -344,7 +391,9 @@ const CASES = {
       ['10.15','???','POP','Berkas Surat Izin'],
     ],
     quick:[
-      { prompt:'Pada baris 09.40 (Bu Citra, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Absensi','Berkas Surat Izin','Berkas Nilai Siswa'], answer:'Berkas Nilai Siswa' }
+      { prompt:'Pada baris 09.40 (Bu Citra, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Absensi','Berkas Surat Izin','Berkas Nilai Siswa'], answer:'Berkas Nilai Siswa' },
+      { prompt:'Setelah seluruh log Kotak Arsip Biru ini dicatat, berkas apa yang MASIH tersisa di dalam kotak?', options:['Berkas Absensi','Berkas Surat Izin','Berkas Nilai Siswa'], answer:'Berkas Absensi' },
+      { prompt:'Kotak Arsip Biru menerapkan aturan tumpukan (stack). Jika Berkas Nilai Siswa dimasukkan tepat sebelum diambil, berkas itu akan menjadi berkas yang...', options:['pertama diambil','terakhir diambil','tidak akan pernah diambil'], answer:'pertama diambil' },
     ],
   },
   'kantor-c': {
@@ -360,7 +409,9 @@ const CASES = {
       ['10.10','???','POP','Berkas Undangan'],
     ],
     quick:[
-      { prompt:'Pada baris 09.00 (Bu Ayu, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Inventaris','Berkas Proposal','Berkas Undangan'], answer:'Berkas Proposal' }
+      { prompt:'Pada baris 09.00 (Bu Ayu, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Inventaris','Berkas Proposal','Berkas Undangan'], answer:'Berkas Proposal' },
+      { prompt:'Setelah seluruh log Kotak Arsip Hijau ini dicatat, berkas apa yang MASIH tersisa di dalam kotak?', options:['Berkas Inventaris','Berkas Proposal','Berkas Undangan'], answer:'Berkas Inventaris' },
+      { prompt:'Kotak Arsip Hijau menerapkan aturan tumpukan (stack). Jika Berkas Proposal dimasukkan tepat sebelum diambil, berkas itu akan menjadi berkas yang...', options:['pertama diambil','terakhir diambil','tidak akan pernah diambil'], answer:'pertama diambil' },
     ],
   },
   'kantor-d': {
@@ -376,7 +427,9 @@ const CASES = {
       ['10.05','???','POP','Berkas Reimburse'],
     ],
     quick:[
-      { prompt:'Pada baris 09.00 (Pak Gilang, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Cuti','Berkas Lembur','Berkas Reimburse'], answer:'Berkas Lembur' }
+      { prompt:'Pada baris 09.00 (Pak Gilang, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Cuti','Berkas Lembur','Berkas Reimburse'], answer:'Berkas Lembur' },
+      { prompt:'Setelah seluruh log Kotak Arsip Ungu ini dicatat, berkas apa yang MASIH tersisa di dalam kotak?', options:['Berkas Cuti','Berkas Lembur','Berkas Reimburse'], answer:'Berkas Cuti' },
+      { prompt:'Kotak Arsip Ungu menerapkan aturan tumpukan (stack). Jika Berkas Lembur dimasukkan tepat sebelum diambil, berkas itu akan menjadi berkas yang...', options:['pertama diambil','terakhir diambil','tidak akan pernah diambil'], answer:'pertama diambil' },
     ],
   },
   'rs-a': {
@@ -393,7 +446,9 @@ const CASES = {
       ['08.20','-','DEQUEUE','Joko dipanggil'],
     ],
     quick:[
-      { prompt:'Pada DEQUEUE pukul 08.20, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Wati','Joko','Ratna'], answer:'Wati' }
+      { prompt:'Pada DEQUEUE pukul 08.20, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Wati','Joko','Ratna'], answer:'Wati' },
+      { prompt:'Menurut log resmi, siapa yang SEBENARNYA dipanggil pukul 08.20, padahal urutan itu melanggar aturan antrian?', options:['Wati','Joko','Ratna'], answer:'Joko' },
+      { prompt:'Tono adalah pasien yang tiba paling awal dalam antrian ini. Menurut aturan FIFO, pasien yang tiba paling awal seharusnya...', options:['dilayani paling awal','dilayani paling akhir','dilewati begitu saja'], answer:'dilayani paling awal' },
     ],
   },
   'rs-b': {
@@ -410,7 +465,9 @@ const CASES = {
       ['09.19','-','DEQUEUE','Galih dipanggil'],
     ],
     quick:[
-      { prompt:'Pada DEQUEUE pukul 09.19, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Umar','Galih','Dewi'], answer:'Umar' }
+      { prompt:'Pada DEQUEUE pukul 09.19, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Umar','Galih','Dewi'], answer:'Umar' },
+      { prompt:'Menurut log resmi, siapa yang SEBENARNYA dipanggil pukul 09.19, padahal urutan itu melanggar aturan antrian?', options:['Umar','Galih','Dewi'], answer:'Galih' },
+      { prompt:'Sari adalah pasien yang tiba paling awal dalam antrian ini. Menurut aturan FIFO, pasien yang tiba paling awal seharusnya...', options:['dilayani paling awal','dilayani paling akhir','dilewati begitu saja'], answer:'dilayani paling awal' },
     ],
   },
   'rs-c': {
@@ -427,7 +484,9 @@ const CASES = {
       ['10.17','-','DEQUEUE','Sekar dipanggil'],
     ],
     quick:[
-      { prompt:'Pada DEQUEUE pukul 10.17, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Puput','Sekar','Made'], answer:'Puput' }
+      { prompt:'Pada DEQUEUE pukul 10.17, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Puput','Sekar','Made'], answer:'Puput' },
+      { prompt:'Menurut log resmi, siapa yang SEBENARNYA dipanggil pukul 10.17, padahal urutan itu melanggar aturan antrian?', options:['Puput','Sekar','Made'], answer:'Sekar' },
+      { prompt:'Anton adalah pasien yang tiba paling awal dalam antrian ini. Menurut aturan FIFO, pasien yang tiba paling awal seharusnya...', options:['dilayani paling awal','dilayani paling akhir','dilewati begitu saja'], answer:'dilayani paling awal' },
     ],
   },
   'rs-d': {
@@ -444,7 +503,9 @@ const CASES = {
       ['11.20','-','DEQUEUE','Cinta dipanggil'],
     ],
     quick:[
-      { prompt:'Pada DEQUEUE pukul 11.20, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Intan','Cinta','Rendra'], answer:'Intan' }
+      { prompt:'Pada DEQUEUE pukul 11.20, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Intan','Cinta','Rendra'], answer:'Intan' },
+      { prompt:'Menurut log resmi, siapa yang SEBENARNYA dipanggil pukul 11.20, padahal urutan itu melanggar aturan antrian?', options:['Intan','Cinta','Rendra'], answer:'Cinta' },
+      { prompt:'Yoga adalah pasien yang tiba paling awal dalam antrian ini. Menurut aturan FIFO, pasien yang tiba paling awal seharusnya...', options:['dilayani paling awal','dilayani paling akhir','dilewati begitu saja'], answer:'dilayani paling awal' },
     ],
   },
   'sekolah-a': {
@@ -457,7 +518,9 @@ const CASES = {
     ],
     kejadian:'Saat istirahat kedua, tas Fajar diperiksa lebih dulu, disusul tas Nadia. Namun uang kas ternyata berada di tas Rio, dan seorang siswa mengaku sempat melihat isi tas Rio sudah terbuka lebih awal, padahal posisinya di paling bawah tumpukan.',
     quick:[
-      { prompt:'Tas mana yang janggal karena disebut sudah terbuka lebih awal, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Rio','Tas Nadia','Tas Fajar'], answer:'Tas Rio' }
+      { prompt:'Tas mana yang janggal karena disebut sudah terbuka lebih awal, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Rio','Tas Nadia','Tas Fajar'], answer:'Tas Rio' },
+      { prompt:'HP siapa yang akan diambil PALING PERTAMA dari kotak titipan sesuai aturan antrian (FIFO)?', options:['HP Ica','HP Bayu'], answer:'HP Ica' },
+      { prompt:'Tas Rio diletakkan PALING AWAL (paling bawah tumpukan). Menurut aturan tumpukan, tas yang diletakkan paling awal akan menjadi tas yang...', options:['diperiksa paling akhir','diperiksa paling awal','tidak pernah diperiksa'], answer:'diperiksa paling akhir' },
     ],
   },
   'sekolah-b': {
@@ -470,7 +533,9 @@ const CASES = {
     ],
     kejadian:'Uang kas kelas disimpan di tas Wisnu. Saat digeledah, tas Doni dan Lina diperiksa lebih dulu sesuai urutan tumpukan, tapi ada laporan bahwa tas Wisnu sudah terbuka duluan sebelum dua tas di atasnya diperiksa.',
     quick:[
-      { prompt:'Tas mana yang janggal karena disebut sudah terbuka duluan, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Wisnu','Tas Lina','Tas Doni'], answer:'Tas Wisnu' }
+      { prompt:'Tas mana yang janggal karena disebut sudah terbuka duluan, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Wisnu','Tas Lina','Tas Doni'], answer:'Tas Wisnu' },
+      { prompt:'HP siapa yang akan diambil PALING PERTAMA dari kotak titipan sesuai aturan antrian (FIFO)?', options:['HP Sasa','HP Rehan'], answer:'HP Sasa' },
+      { prompt:'Tas Wisnu diletakkan PALING AWAL (paling bawah tumpukan). Menurut aturan tumpukan, tas yang diletakkan paling awal akan menjadi tas yang...', options:['diperiksa paling akhir','diperiksa paling awal','tidak pernah diperiksa'], answer:'diperiksa paling akhir' },
     ],
   },
   'sekolah-c': {
@@ -483,7 +548,9 @@ const CASES = {
     ],
     kejadian:'Uang kas ada di dalam tas Egi. Sesuai aturan tumpukan, tas Anggun diperiksa duluan, lalu Putri. Tapi seseorang mengaku sudah melihat isi tas Egi lebih dulu, padahal seharusnya belum bisa diakses karena masih ada dua tas di atasnya.',
     quick:[
-      { prompt:'Tas mana yang janggal karena disebut sudah dilihat isinya lebih dulu, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Egi','Tas Putri','Tas Anggun'], answer:'Tas Egi' }
+      { prompt:'Tas mana yang janggal karena disebut sudah dilihat isinya lebih dulu, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Egi','Tas Putri','Tas Anggun'], answer:'Tas Egi' },
+      { prompt:'HP siapa yang akan diambil PALING PERTAMA dari kotak titipan sesuai aturan antrian (FIFO)?', options:['HP Zaki','HP Vina'], answer:'HP Zaki' },
+      { prompt:'Tas Egi diletakkan PALING AWAL (paling bawah tumpukan). Menurut aturan tumpukan, tas yang diletakkan paling awal akan menjadi tas yang...', options:['diperiksa paling akhir','diperiksa paling awal','tidak pernah diperiksa'], answer:'diperiksa paling akhir' },
     ],
   },
   'sekolah-d': {
@@ -496,7 +563,9 @@ const CASES = {
     ],
     kejadian:'Uang kas ada di dalam tas Hasan. Sesuai aturan tumpukan, tas Ojan diperiksa duluan, lalu Mira. Tapi seorang siswa mengaku sudah melihat isi tas Hasan lebih dulu, padahal seharusnya belum bisa diakses karena masih ada dua tas di atasnya.',
     quick:[
-      { prompt:'Tas mana yang janggal karena disebut sudah dilihat isinya lebih dulu, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Hasan','Tas Mira','Tas Ojan'], answer:'Tas Hasan' }
+      { prompt:'Tas mana yang janggal karena disebut sudah dilihat isinya lebih dulu, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Hasan','Tas Mira','Tas Ojan'], answer:'Tas Hasan' },
+      { prompt:'HP siapa yang akan diambil PALING PERTAMA dari kotak titipan sesuai aturan antrian (FIFO)?', options:['HP Tia','HP Rafi'], answer:'HP Tia' },
+      { prompt:'Tas Hasan diletakkan PALING AWAL (paling bawah tumpukan). Menurut aturan tumpukan, tas yang diletakkan paling awal akan menjadi tas yang...', options:['diperiksa paling akhir','diperiksa paling awal','tidak pernah diperiksa'], answer:'diperiksa paling akhir' },
     ],
   },
   'bonus': {
@@ -511,6 +580,8 @@ const CASES = {
     quick:[
       { prompt:'Pada POP pertama di Rak A, barang apa yang seharusnya terambil?', options:['Kotak 1','Kotak 2','Kotak 3'], answer:'Kotak 3' },
       { prompt:'Pada DEQUEUE pertama di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Pelanggan 1','Pelanggan 2','Pelanggan 3'], answer:'Pelanggan 1' },
+      { prompt:'Pada POP kedua di Rak A, barang apa yang seharusnya terambil?', options:['Kotak 1','Kotak 2','Kotak 4'], answer:'Kotak 4' },
+      { prompt:'Pada DEQUEUE kedua di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Pelanggan 2','Pelanggan 3','Pelanggan 4'], answer:'Pelanggan 2' },
     ],
   },
   'bonus-b': {
@@ -525,6 +596,8 @@ const CASES = {
     quick:[
       { prompt:'Pada POP pertama di Rak B, barang apa yang seharusnya terambil?', options:['Dus B','Dus C','Dus D'], answer:'Dus D' },
       { prompt:'Pada DEQUEUE pertama di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Bu Wati','Pak Anwar','Bu Lastri'], answer:'Bu Wati' },
+      { prompt:'Pada POP kedua di Rak B, barang apa yang seharusnya terambil?', options:['Dus A','Dus B','Dus C'], answer:'Dus C' },
+      { prompt:'Pada DEQUEUE kedua di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Pak Anwar','Bu Lastri','Pak Ujang'], answer:'Pak Anwar' },
     ],
   },
   'bonus-c': {
@@ -539,6 +612,8 @@ const CASES = {
     quick:[
       { prompt:'Pada POP kedua di Rak C, barang apa yang seharusnya terambil?', options:['Peti 2','Peti 3','Peti 4'], answer:'Peti 4' },
       { prompt:'Pada DEQUEUE kedua di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Toko Sentosa','Toko Barokah','Toko Damai'], answer:'Toko Sentosa' },
+      { prompt:'Pada POP pertama di Rak C, barang apa yang seharusnya terambil?', options:['Peti 1','Peti 2','Peti 3'], answer:'Peti 2' },
+      { prompt:'Pada DEQUEUE pertama di daftar Pesanan Gudang C, pelanggan mana yang seharusnya dikirim?', options:['Toko Maju','Toko Sentosa','Toko Barokah'], answer:'Toko Maju' },
     ],
   },
 };
@@ -579,7 +654,118 @@ const storage = {
   }
 };
 
-const state = { kelas: localStorage.getItem('currentKelas') || '', kelompok:'', caseId:null, quiz:{ attempts:{}, solved:{}, emblem:null } };
+const state = { kelas: localStorage.getItem('currentKelas') || '', caseId:null, session:null };
+const POIN_PER_SOAL = 10; // poin yang didapat kelompok untuk tiap soal yang dijawab benar
+
+/* ---------------- Suara: backsound tema misteri + efek (disintesis, tanpa file eksternal) ---------------- */
+let soundOn = localStorage.getItem('soundOn') !== 'off';
+let audioCtx = null;
+let bgState = { started:false, oscs:[], master:null, plucking:false, timer:null };
+
+function ensureAudio(){
+  if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+  if(audioCtx.state === 'suspended'){ audioCtx.resume(); }
+  return audioCtx;
+}
+
+function playTone(freq, dur, type, gainVal, delay){
+  if(!soundOn) return;
+  try{
+    const ctx = ensureAudio();
+    const t0 = ctx.currentTime + (delay || 0);
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, t0);
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(gainVal || 0.12, t0 + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+    osc.connect(g); g.connect(ctx.destination);
+    osc.start(t0); osc.stop(t0 + dur + 0.05);
+  }catch(e){ /* audio tidak tersedia di perangkat ini */ }
+}
+
+function sfxCorrect(){ playTone(660, 0.14, 'sine', 0.14); playTone(880, 0.18, 'sine', 0.12, 0.08); }
+function sfxWrong(){ playTone(180, 0.28, 'sawtooth', 0.09); }
+function sfxWin(){
+  const notes = [523.25, 659.25, 783.99, 1046.5];
+  notes.forEach((f,i) => playTone(f, 0.3, 'triangle', 0.13, i * 0.12));
+  playTone(1046.5, 0.5, 'sine', 0.1, 0.5);
+}
+
+function startBacksound(){
+  if(!soundOn || bgState.started) return;
+  try{
+    const ctx = ensureAudio();
+    const master = ctx.createGain();
+    master.gain.value = 1;
+    master.connect(ctx.destination);
+    const droneFreqs = [110, 164.81];
+    const oscs = [];
+    droneFreqs.forEach(f => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sine'; osc.frequency.value = f;
+      const g = ctx.createGain(); g.gain.value = 0.025;
+      osc.connect(g); g.connect(master); osc.start();
+      oscs.push(osc);
+    });
+    bgState = { started:true, oscs, master, plucking:true, timer:null };
+    const arp = [220, 261.63, 293.66, 329.63, 261.63];
+    let idx = 0;
+    (function pluck(){
+      if(!bgState.plucking) return;
+      const ctx2 = ensureAudio();
+      const f = arp[idx % arp.length]; idx++;
+      const t0 = ctx2.currentTime;
+      const osc = ctx2.createOscillator();
+      const g = ctx2.createGain();
+      osc.type = 'triangle'; osc.frequency.setValueAtTime(f, t0);
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(0.05, t0 + 0.06);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.3);
+      osc.connect(g); g.connect(bgState.master);
+      osc.start(t0); osc.stop(t0 + 1.4);
+      bgState.timer = setTimeout(pluck, 1800 + Math.random() * 1000);
+    })();
+  }catch(e){ /* audio tidak tersedia di perangkat ini */ }
+}
+
+function stopBacksound(){
+  bgState.plucking = false;
+  clearTimeout(bgState.timer);
+  if(bgState.started){
+    try{ bgState.oscs.forEach(o => o.stop()); bgState.master.disconnect(); }catch(e){ /* sudah berhenti */ }
+  }
+  bgState = { started:false, oscs:[], master:null, plucking:false, timer:null };
+}
+
+function toggleSound(){
+  soundOn = !soundOn;
+  localStorage.setItem('soundOn', soundOn ? 'on' : 'off');
+  document.getElementById('sound-toggle').textContent = soundOn ? '🔊' : '🔇';
+  if(soundOn){ startBacksound(); } else { stopBacksound(); }
+}
+
+document.addEventListener('click', function initAudioOnce(){
+  if(soundOn){ startBacksound(); }
+  document.removeEventListener('click', initAudioOnce);
+}, { once:true });
+
+/* ---------------- Confetti (perayaan skor akhir) ---------------- */
+function burstConfetti(container){
+  const colors = ['#c7a75c','#7c2a2a','#ece3cd','#a9873b','#9a3a3a','#ddd0ac'];
+  for(let i=0;i<46;i++){
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (Math.random() * 100) + '%';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDuration = (1.6 + Math.random() * 1.2) + 's';
+    p.style.animationDelay = (Math.random() * 0.4) + 's';
+    p.style.transform = 'rotate(' + Math.floor(Math.random() * 360) + 'deg)';
+    container.appendChild(p);
+    setTimeout(() => { if(p.parentNode) p.remove(); }, 3200);
+  }
+}
 
 /* ---------------- Build selection screen ---------------- */
 function buildCaseGrids(){
@@ -656,7 +842,7 @@ function mountDiorama(tema){
 /* ---------------- Render case screen ---------------- */
 async function renderCase(){
   const c = CASES[state.caseId];
-  document.getElementById('who-line').textContent = state.kelompok || '';
+  document.getElementById('who-line').textContent = state.kelas || '';
   document.getElementById('case-tema-label').textContent = c.temaLabel.toUpperCase();
   document.getElementById('case-title').textContent = c.judul;
   document.getElementById('case-latar').textContent = c.latar;
@@ -696,27 +882,14 @@ async function renderCase(){
     extra.appendChild(p);
   }
 
-  buildKelompokSelect();
   document.getElementById('status-line').textContent = STATUS_HINT_DEFAULT; document.getElementById('status-line').className = 'status-line';
-  state.quiz = state.kelompok ? await loadQuiz() : { attempts:{}, solved:{}, emblem:null };
-  renderQuick(c);
-  document.getElementById('emblem-panel').innerHTML = '';
-  if(state.quiz.emblem){ showEmblem(state.quiz.emblem); }
-  if(state.kelompok){ loadJawaban(); }
+  await loadCaseProgressAndRender();
 }
 
-function buildKelompokSelect(){
-  const sel = document.getElementById('kelompok-select');
-  sel.innerHTML = '<option value="">Pilih kelompok</option>';
-  for(let i=1;i<=10;i++){
-    const opt = document.createElement('option');
-    opt.value = 'Kelompok ' + i;
-    opt.textContent = 'Kelompok ' + i;
-    sel.appendChild(opt);
-  }
-  sel.value = state.kelompok || '';
-  sel.onchange = onKelompokChange;
-  document.getElementById('who-line').textContent = (state.kelas ? state.kelas + ' / ' : '') + (state.kelompok || '');
+function kelompokOptionsHTML(){
+  let out = '<option value="">Pilih kelompok</option>';
+  for(let i=1;i<=10;i++){ out += '<option value="Kelompok ' + i + '">Kelompok ' + i + '</option>'; }
+  return out;
 }
 
 /* Kelas dipilih sekali di layar depan (cover) dan dikunci untuk seluruh sesi,
@@ -726,18 +899,6 @@ function onKelasChangeCover(){
   state.kelas = document.getElementById('kelas-input').value.trim();
   localStorage.setItem('currentKelas', state.kelas);
   document.getElementById('btn-mulai').disabled = !state.kelas;
-}
-
-async function onKelompokChange(){
-  state.kelompok = document.getElementById('kelompok-select').value;
-  document.getElementById('who-line').textContent = (state.kelas ? state.kelas + ' / ' : '') + (state.kelompok || '');
-  document.getElementById('status-line').textContent = STATUS_HINT_DEFAULT; document.getElementById('status-line').className = 'status-line';
-  const c = CASES[state.caseId];
-  state.quiz = state.kelompok ? await loadQuiz() : { attempts:{}, solved:{}, emblem:null };
-  renderQuick(c);
-  document.getElementById('emblem-panel').innerHTML = '';
-  if(state.quiz.emblem){ showEmblem(state.quiz.emblem); }
-  if(state.kelompok){ loadJawaban(); }
 }
 
 function buildTable(cols, rows){
@@ -754,7 +915,7 @@ function buildTable(cols, rows){
   return t;
 }
 
-/* ---------------- Uji Cepat (quick check + lencana) ---------------- */
+/* ---------------- Uji Cepat: kuis satu-soal-per-layar dengan tombol Next ---------------- */
 function shuffleArr(arr){
   for(let i=arr.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
@@ -763,167 +924,43 @@ function shuffleArr(arr){
   return arr;
 }
 
-function renderQuick(c){
-  const panel = document.getElementById('quick-panel');
-  panel.innerHTML = '';
-  if(!c.quick || !c.quick.length) return;
+function slugKelompok(nama){ return (nama || 'tanpa-nama').toLowerCase().replace(/\s+/g,'-'); }
+function slugKelas(){ return (state.kelas || 'tanpa-kelas').toLowerCase().replace(/\s+/g,'-'); }
 
-  const h = document.createElement('h3');
-  h.className = 'type';
-  h.textContent = 'UJI CEPAT';
-  panel.appendChild(h);
-
-  c.quick.forEach((q, i) => {
-    const qid = 'q' + i;
-    const box = document.createElement('div');
-    box.className = 'quick-q';
-
-    const p = document.createElement('p');
-    p.className = 'quick-prompt';
-    p.textContent = (i+1) + '. ' + q.prompt;
-    box.appendChild(p);
-
-    const opts = document.createElement('div');
-    opts.className = 'quick-opts';
-    if(!q._shuffled){ q._shuffled = shuffleArr(q.options.slice()); }
-    const solved = !!state.quiz.solved[qid];
-
-    q._shuffled.forEach(opt => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'quick-opt';
-      b.textContent = opt;
-      if(solved){
-        b.classList.add('disabled');
-        if(opt === q.answer) b.classList.add('correct');
-      }
-      b.addEventListener('click', () => pilihSementara(i, opt, b, opts));
-      opts.appendChild(b);
-    });
-    box.appendChild(opts);
-
-    if(!solved){
-      const submitBtn = document.createElement('button');
-      submitBtn.type = 'button';
-      submitBtn.className = 'btn quick-submit';
-      submitBtn.id = 'quick-submit-' + i;
-      submitBtn.textContent = 'Simpan Jawaban';
-      submitBtn.disabled = true;
-      submitBtn.addEventListener('click', () => submitJawaban(i, opts));
-      box.appendChild(submitBtn);
-    }
-
-    const status = document.createElement('p');
-    status.className = 'quick-status';
-    status.id = 'quick-status-' + i;
-    if(solved){ status.textContent = 'Tepat.'; status.classList.add('ok'); }
-    box.appendChild(status);
-
-    panel.appendChild(box);
-  });
-}
-
-/* Klik opsi hanya menandai pilihan (belum menyimpan, belum menilai benar/salah).
-   Penilaian, penyimpanan, dan tanda benar/salah baru terjadi saat "Simpan Jawaban". */
-function pilihSementara(i, val, btnEl, groupEl){
-  if(state.quiz.solved['q' + i]) return;
-  groupEl.querySelectorAll('.quick-opt').forEach(b => b.classList.remove('selected'));
-  btnEl.classList.add('selected');
-  groupEl.dataset.picked = val;
-  const submitBtn = document.getElementById('quick-submit-' + i);
-  if(submitBtn) submitBtn.disabled = false;
-}
-
-async function submitJawaban(i, groupEl){
-  if(!state.kelompok){
-    const status = document.getElementById('quick-status-' + i);
-    status.textContent = 'Pilih kelompok dahulu di atas.';
-    status.className = 'quick-status err';
-    return;
-  }
-  const val = groupEl.dataset.picked;
-  if(!val) return;
-
-  const c = CASES[state.caseId];
-  const q = c.quick[i];
-  const qid = 'q' + i;
-  if(state.quiz.solved[qid]) return;
-
-  const btnEl = Array.from(groupEl.querySelectorAll('.quick-opt')).find(b => b.textContent === val);
-  const submitBtn = document.getElementById('quick-submit-' + i);
-  state.quiz.attempts[qid] = (state.quiz.attempts[qid] || 0) + 1;
-  const status = document.getElementById('quick-status-' + i);
-
-  if(val === q.answer){
-    state.quiz.solved[qid] = true;
-    if(btnEl) btnEl.classList.add('correct');
-    groupEl.querySelectorAll('.quick-opt').forEach(b => b.classList.add('disabled'));
-    if(submitBtn) submitBtn.remove();
-    status.textContent = 'Tepat.';
-    status.className = 'quick-status ok';
-    await saveQuiz(state.quiz);
-    await checkEmblem();
-  } else {
-    if(btnEl) btnEl.classList.add('wrong');
-    setTimeout(() => { if(btnEl) btnEl.classList.remove('wrong', 'selected'); }, 700);
-    delete groupEl.dataset.picked;
-    if(submitBtn) submitBtn.disabled = true;
-    status.textContent = 'Belum tepat, telusuri lagi urutan datanya.';
-    status.className = 'quick-status err';
-    await saveQuiz(state.quiz);
-    await tambahKasusSalah();
-  }
-}
-
-/* Lencana & poin murni dari performa kelompok itu sendiri: langsung benar
-   tanpa salah = poin & lencana tertinggi, makin banyak salah makin turun.
-   Tidak lagi peduli kelompok keberapa yang selesai duluan. */
-/* Kesalahan dihitung bersama untuk berkas ini (lintas kelompok, dalam kelas
-   yang sama) — bukan cuma kesalahan kelompok itu sendiri. Jadi kalau kelompok
-   lain sudah pernah salah duluan di berkas ini, kelompok berikutnya yang
-   baru mengerjakannya ikut mewarisi hitungan itu meski jawabannya sendiri
-   langsung benar. */
-function kasusSalahKey(){ return 'kasusSalah:' + slugKelas() + ':' + state.caseId; }
-
-async function getKasusSalah(){
+/* Ini satu layar bersama untuk seluruh kelas: kelompok dipilih ulang di
+   setiap soal (bukan per kasus), jadi status "tuntas" sebuah kasus berlaku
+   untuk seluruh kelas, bukan per kelompok. Fungsi ini melihat kasus mana
+   saja yang sudah tuntas dijawab, supaya kita tahu kapan SELURUH kasus
+   sudah selesai dan Papan Peringkat boleh dibuka. */
+async function getKasusSelesaiGlobal(){
+  const prefix = 'kasusSelesai:' + slugKelas() + ':';
+  let keys = [];
   try{
-    const res = await storage.get(kasusSalahKey());
-    if(res && res.value){ return parseInt(res.value, 10) || 0; }
-  }catch(e){ /* belum ada kesalahan tercatat */ }
-  return 0;
-}
-
-async function tambahKasusSalah(){
-  const next = (await getKasusSalah()) + 1;
-  try{ await storage.set(kasusSalahKey(), String(next)); }catch(e){ /* koneksi bermasalah */ }
-  return next;
-}
-
-function tentukanTier(extra){
-  if(extra === 0) return 'emas';
-  if(extra <= 2) return 'perak';
-  return 'perunggu';
-}
-
-function hitungPoin(extra){
-  return Math.max(100 - extra * 15, 10);
-}
-
-async function checkEmblem(){
-  const c = CASES[state.caseId];
-  const allSolved = c.quick.every((_, i) => state.quiz.solved['q' + i]);
-  if(allSolved && !state.quiz.emblem){
-    const extra = await getKasusSalah();
-    const tier = tentukanTier(extra);
-    const poin = hitungPoin(extra);
-
-    state.quiz.emblem = tier;
-    state.quiz.extra = extra;
-    state.quiz.poin = poin;
-    await saveQuiz(state.quiz);
-    showEmblem(tier, extra, poin);
-    await simpanHasilOtomatis();
+    const res = await storage.list(prefix);
+    keys = (res && res.keys) || [];
+  }catch(e){ keys = []; }
+  const out = {};
+  for(const k of keys){
+    try{
+      const res = await storage.get(k);
+      if(res && res.value){ out[k.slice(prefix.length)] = JSON.parse(res.value); }
+    }catch(e){ /* lewati entri yang gagal dibaca */ }
   }
+  return out;
+}
+
+async function updateSelectProgress(){
+  const line = document.getElementById('select-progress-line');
+  if(!line) return;
+  document.querySelectorAll('#screen-select [data-case]').forEach(b => b.classList.remove('done'));
+  const selesai = await getKasusSelesaiGlobal();
+  const idsSelesai = Object.keys(selesai);
+  idsSelesai.forEach(id => {
+    const btn = document.querySelector('#screen-select [data-case="' + id + '"]');
+    if(btn) btn.classList.add('done');
+  });
+  const totalKasus = Object.keys(CASES).length;
+  line.textContent = idsSelesai.length + ' dari ' + totalKasus + ' kasus sudah tuntas dijawab.';
 }
 
 function emblemSVG(tier){
@@ -932,7 +969,7 @@ function emblemSVG(tier){
     perak:{a:'#c9ccd1', b:'#888d94'},
     perunggu:{a:'#c98452', b:'#8a4d28'},
   }[tier];
-  return '<svg width="80" height="92" viewBox="0 0 86 100" xmlns="http://www.w3.org/2000/svg">' +
+  return '<svg width="76" height="88" viewBox="0 0 86 100" xmlns="http://www.w3.org/2000/svg">' +
     '<polygon points="27,55 43,95 33,90 27,100 20,68" fill="'+colors.b+'"/>' +
     '<polygon points="59,55 43,95 53,90 59,100 66,68" fill="'+colors.b+'"/>' +
     '<circle cx="43" cy="42" r="34" fill="'+colors.a+'" stroke="'+colors.b+'" stroke-width="4"/>' +
@@ -941,35 +978,264 @@ function emblemSVG(tier){
     '</svg>';
 }
 
-function showEmblem(tier, extra, poin){
-  const panel = document.getElementById('emblem-panel');
-  const names = { emas:'LENCANA DETEKTIF EMAS', perak:'LENCANA DETEKTIF PERAK', perunggu:'LENCANA DETEKTIF PERUNGGU' };
-  const p = poin !== undefined ? poin : state.quiz.poin;
+/* Status tuntas sebuah kasus kini berlaku untuk seluruh kelas (satu layar
+   bersama), bukan lagi per kelompok — supaya kalau layar dimuat ulang,
+   kasus yang sudah tuntas tidak diminta diulang dari nol. */
+function kasusSelesaiKey(){ return 'kasusSelesai:' + slugKelas() + ':' + state.caseId; }
 
-  const poinTxt = (p !== undefined) ? ('<p class="emblem-sub"><strong>' + p + ' poin</strong> untuk berkas ini.</p>') : '';
+async function loadKasusSelesai(){
+  try{
+    const res = await storage.get(kasusSelesaiKey());
+    if(res && res.value){ return JSON.parse(res.value); }
+  }catch(e){ /* belum pernah dikerjakan */ }
+  return null;
+}
 
-  panel.innerHTML = '<div class="emblem-card">' + emblemSVG(tier) +
-    '<p class="emblem-title">' + names[tier] + '</p>' +
-    poinTxt +
+async function saveKasusSelesai(result){
+  try{ await storage.set(kasusSelesaiKey(), JSON.stringify(result)); }
+  catch(e){ /* koneksi bermasalah */ }
+}
+
+async function loadCaseProgressAndRender(){
+  const panel = document.getElementById('quiz-panel');
+  panel.innerHTML = '';
+  const c = CASES[state.caseId];
+  if(!c.quick || !c.quick.length) return;
+
+  const saved = await loadKasusSelesai();
+  if(saved && saved.done){
+    renderDoneCard(saved);
+    return;
+  }
+  renderStartGate(c);
+}
+
+/* Kelompok TIDAK lagi dipilih di sini. Ini satu layar bersama untuk semua
+   kelompok: kelompok mana yang sedang menjawab ditentukan ulang di setiap
+   soal (lihat renderQuizStep), supaya soal-soal dalam satu kasus yang sama
+   bisa dimenangkan kelompok yang berbeda-beda. */
+function renderStartGate(c){
+  const panel = document.getElementById('quiz-panel');
+  panel.innerHTML =
+    '<h3 class="type" style="font-size:13.5px;color:var(--red);letter-spacing:0.06em;margin:0 0 10px;">UJI CEPAT</h3>' +
+    '<div class="quiz-gate">' +
+      '<p style="margin:0 0 12px;">Baca dulu berkas kasus di atas. Setiap soal nanti akan menanyakan kelompok mana yang sedang menjawab &mdash; kelompoknya boleh berganti tiap soal.</p>' +
+      '<button type="button" class="btn" onclick="mulaiSesiKuis(CASES[state.caseId])">Mulai Uji Cepat</button>' +
     '</div>';
 }
 
-function slugKelompok(){ return (state.kelompok || 'tanpa-nama').toLowerCase().replace(/\s+/g,'-'); }
-function slugKelas(){ return (state.kelas || 'tanpa-kelas').toLowerCase().replace(/\s+/g,'-'); }
-
-function quizKey(){ return 'quiz:' + slugKelas() + ':' + slugKelompok() + ':' + state.caseId; }
-
-async function loadQuiz(){
-  try{
-    const res = await storage.get(quizKey());
-    if(res && res.value){ return JSON.parse(res.value); }
-  }catch(e){ /* belum ada data tersimpan */ }
-  return { attempts:{}, solved:{}, emblem:null };
+function mulaiSesiKuis(c){
+  state.session = { order: shuffleArr(c.quick.map((_, i) => i)), idx:0, answers:[], currentKelompok:'' };
+  renderQuizStep();
 }
 
-async function saveQuiz(q){
-  try{ await storage.set(quizKey(), JSON.stringify(q)); }
-  catch(e){ /* koneksi bermasalah, coba lagi saat aksi berikutnya */ }
+function renderDoneCard(){
+  const panel = document.getElementById('quiz-panel');
+  panel.innerHTML =
+    '<h3 class="type" style="font-size:13.5px;color:var(--red);letter-spacing:0.06em;margin:0 0 10px;">UJI CEPAT</h3>' +
+    '<div class="quiz-done-card">' +
+      '<p><strong>Kasus ini sudah tuntas dijawab.</strong></p>' +
+      '<p style="font-size:12.5px;color:var(--text-soft);">Poin tiap kelompok sudah tercatat dan baru diumumkan di Papan Peringkat setelah seluruh berkas tuntas.</p>' +
+      '<div class="actions-row" style="justify-content:center;margin-top:8px;">' +
+        '<button type="button" class="btn" onclick="goTo(\'select\')">Kasus Berikutnya</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderQuizStep(){
+  const c = CASES[state.caseId];
+  const s = state.session;
+  const qIndex = s.order[s.idx];
+  const q = c.quick[qIndex];
+  const opts = shuffleArr(q.options.slice());
+  const total = s.order.length;
+
+  // Kelompok ditentukan ulang di setiap soal — belum ada yang dipilih dulu.
+  s.currentKelompok = '';
+  document.getElementById('who-line').textContent = state.kelas || '';
+
+  let dots = '';
+  for(let i=0;i<total;i++){
+    let cls = 'quiz-dot';
+    if(i < s.idx) cls += ' done';
+    else if(i === s.idx) cls += ' current';
+    dots += '<span class="' + cls + '"></span>';
+  }
+
+  const panel = document.getElementById('quiz-panel');
+  panel.innerHTML =
+    '<h3 class="type" style="font-size:13.5px;color:var(--red);letter-spacing:0.06em;margin:0 0 10px;">UJI CEPAT</h3>' +
+    '<div class="quiz-wrap">' +
+      '<div class="quiz-head">' +
+        '<span class="quiz-progress">Soal ' + (s.idx+1) + ' dari ' + total + '</span>' +
+        '<div class="quiz-dots">' + dots + '</div>' +
+        '<span class="quiz-timer" id="quiz-timer">0.0s</span>' +
+      '</div>' +
+      '<div class="quiz-card">' +
+        '<div class="field" style="margin:0 0 14px;">' +
+          '<label for="quiz-kelompok-select">Kelompok yang menjawab soal ini</label>' +
+          '<select id="quiz-kelompok-select" onchange="pilihKelompokSoal(this.value)">' + kelompokOptionsHTML() + '</select>' +
+        '</div>' +
+        '<p class="quiz-prompt2">' + q.prompt + '</p>' +
+        '<div class="quiz-opts2" id="quiz-opts2"></div>' +
+        '<p class="quiz-feedback" id="quiz-feedback"></p>' +
+        '<div class="quiz-next-row" id="quiz-next-row"></div>' +
+      '</div>' +
+    '</div>';
+
+  const optsHost = document.getElementById('quiz-opts2');
+  opts.forEach(opt => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'quiz-opt2';
+    b.textContent = opt;
+    b.addEventListener('click', () => jawabSoal(opt, q, b, optsHost));
+    optsHost.appendChild(b);
+  });
+  setOptsEnabled(false);
+
+  s.qStart = performance.now();
+  s.qFirstDone = false;
+  clearInterval(s.timerInt);
+  const timerEl = document.getElementById('quiz-timer');
+  s.timerInt = setInterval(() => {
+    const el = (performance.now() - s.qStart) / 1000;
+    if(timerEl) timerEl.textContent = el.toFixed(1) + 's';
+  }, 100);
+}
+
+/* Pilihan jawaban terkunci sampai kelompok yang menjawab dipilih dulu —
+   ini yang membuat pemilihan kelompok terjadi "per soal", tepat saat mau
+   menjawab, bukan sekali di awal kasus. */
+function setOptsEnabled(enabled){
+  document.querySelectorAll('#quiz-opts2 .quiz-opt2').forEach(b => {
+    if(!b.classList.contains('locked')) b.disabled = !enabled;
+  });
+}
+
+function pilihKelompokSoal(val){
+  state.session.currentKelompok = val;
+  document.getElementById('who-line').textContent = (state.kelas || '') + (val ? ' · ' + val : '');
+  setOptsEnabled(!!val);
+}
+
+/* Timer di sini murni pengukur kecepatan (dicatat & ditampilkan), tidak
+   membatasi waktu menjawab dan tidak memengaruhi skor.
+
+   Kelompok yang menjawab dipilih ulang di setiap soal (lewat dropdown di
+   atas), jadi soal-soal dalam satu kasus yang sama boleh dimenangkan
+   kelompok yang berbeda-beda. Jawaban salah TIDAK langsung mengunci soal:
+   pilihan yang salah hanya dikunci satu-satu, sisanya tetap bisa dicoba —
+   oleh kelompok yang sama atau kelompok lain yang dipilih ulang di dropdown
+   — sampai jawaban benar ditemukan. Poin diberikan ke kelompok yang sedang
+   dipilih PERSIS saat jawaban benar itu dipilih. Soal baru bisa dilanjutkan
+   (tombol berikutnya) setelah jawaban benar dipilih.*/
+function jawabSoal(val, q, btnEl, groupEl){
+  const s = state.session;
+  const correct = (val === q.answer);
+  const fb = document.getElementById('quiz-feedback');
+  const kelompokAktif = s.currentKelompok;
+
+  // Catat hanya percobaan pertama pada soal ini untuk keperluan statistik sesi.
+  if(!s.qFirstDone){
+    s.qFirstDone = true;
+    const elapsedMs = performance.now() - s.qStart;
+    s.answers.push({ correct, ms: elapsedMs });
+  }
+
+  if(correct){
+    clearInterval(s.timerInt);
+    const elapsedMs = performance.now() - s.qStart;
+    groupEl.querySelectorAll('.quiz-opt2').forEach(b => {
+      b.classList.add('locked');
+      b.disabled = true;
+      if(b.textContent === q.answer) b.classList.add('correct');
+    });
+    document.getElementById('quiz-kelompok-select').disabled = true;
+    fb.textContent = 'Tepat! Poin untuk ' + kelompokAktif + '.'; fb.className = 'quiz-feedback ok'; sfxCorrect();
+    document.getElementById('quiz-timer').textContent = (elapsedMs / 1000).toFixed(1) + 's';
+
+    tambahPoinKelompok(kelompokAktif, POIN_PER_SOAL);
+
+    const isLast = (s.idx === s.order.length - 1);
+    const nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.className = 'btn';
+    nextBtn.textContent = isLast ? 'Tuntaskan Kasus' : 'Soal Berikutnya';
+    nextBtn.onclick = () => { if(isLast){ finishQuiz(); } else { state.session.idx++; renderQuizStep(); } };
+    document.getElementById('quiz-next-row').appendChild(nextBtn);
+  } else {
+    // Kunci hanya pilihan yang baru saja dicoba supaya tidak dipilih ulang,
+    // sisanya tetap terbuka — dropdown kelompok juga tetap aktif supaya
+    // kelompok lain bisa dipilih untuk mencoba lagi.
+    btnEl.classList.add('locked', 'wrong');
+    btnEl.disabled = true;
+    fb.textContent = kelompokAktif + ' belum tepat — coba pilihan lain atau ganti kelompok.';
+    fb.className = 'quiz-feedback err';
+    sfxWrong();
+  }
+}
+
+/* ---------------- Skor kelompok (akumulasi lintas soal & kasus) ----------------
+   Poin TIDAK ditampilkan langsung sebagai total — setiap kelompok hanya
+   diberi tahu ia baru saja mendapat poin untuk satu soal. Skor gabungan
+   baru boleh dilihat lewat Papan Peringkat, dan itu pun baru terbuka
+   setelah SELURUH kasus tuntas dijawab. */
+function skorKelompokKey(kelompok){ return 'skor:' + slugKelas() + ':' + slugKelompok(kelompok); }
+
+async function tambahPoinKelompok(kelompok, poinTambahan){
+  if(!kelompok) return;
+  const key = skorKelompokKey(kelompok);
+  let data = { kelompok, poin:0, benar:0, terakhir:null };
+  try{
+    const res = await storage.get(key);
+    if(res && res.value){ data = JSON.parse(res.value); }
+  }catch(e){ /* belum ada skor tersimpan untuk kelompok ini */ }
+  data.kelompok = kelompok;
+  data.poin = (data.poin || 0) + poinTambahan;
+  data.benar = (data.benar || 0) + 1;
+  data.terakhir = new Date().toISOString();
+  try{ await storage.set(key, JSON.stringify(data)); }
+  catch(e){ /* koneksi/penyimpanan bermasalah */ }
+}
+
+async function finishQuiz(){
+  await saveKasusSelesai({ done:true, completedAt: new Date().toISOString() });
+  await loadCaseProgressAndRender();
+
+  // Popup "seluruh berkas tuntas" (dengan confetti) baru muncul kalau
+  // SEMUA kasus sudah tuntas dijawab — bukan setiap kali satu kasus selesai.
+  const selesai = await getKasusSelesaiGlobal();
+  const semuaIds = Object.keys(CASES);
+  const sudahSemua = semuaIds.every(id => selesai[id]);
+  if(sudahSemua){
+    showFinalScoreOverlay();
+  }
+}
+
+/* Muncul sekali, setelah SELURUH kasus (semua soal, semua berkas) tuntas.
+   Tidak menampilkan skor kelompok mana pun di sini — skor baru terbuka
+   di Papan Peringkat lewat tombol di bawah. */
+function showFinalScoreOverlay(){
+  const overlay = document.getElementById('score-overlay');
+  overlay.innerHTML =
+    '<div class="score-card" id="score-card">' +
+      '<p class="score-kicker type">SELURUH BERKAS TUNTAS</p>' +
+      '<p class="score-title type">Semua 15 berkas kasus sudah terpecahkan!</p>' +
+      emblemSVG('emas') +
+      '<p class="score-sub">Skor tiap kelompok dirahasiakan sampai sekarang — saatnya membuka Papan Peringkat.</p>' +
+      '<div class="score-actions">' +
+        '<button type="button" class="btn" onclick="closeScoreOverlay(); goTo(\'board\');">Buka Papan Peringkat</button>' +
+        '<button type="button" class="btn btn-ghost" onclick="closeScoreOverlay();">Tutup</button>' +
+      '</div>' +
+    '</div>';
+  overlay.hidden = false;
+  burstConfetti(document.getElementById('score-card'));
+  sfxWin();
+}
+
+function closeScoreOverlay(){
+  document.getElementById('score-overlay').hidden = true;
 }
 
 /* ---------------- Papan Peringkat (mode pengungkapan) ---------------- */
@@ -996,44 +1262,23 @@ async function fetchBoardRows(){
   const kelasSlug = ((kelasInput && kelasInput.value.trim()) || state.kelas || 'tanpa-kelas').toLowerCase().replace(/\s+/g,'-');
   let keys = [];
   try{
-    const res = await storage.list('jawaban:' + kelasSlug + ':');
+    const res = await storage.list('skor:' + kelasSlug + ':');
     keys = (res && res.keys) || [];
   }catch(e){ keys = []; }
 
-  const raw = [];
+  const rows = [];
   for(const k of keys){
     try{
       const res = await storage.get(k);
-      if(res && res.value){ raw.push(JSON.parse(res.value)); }
+      if(res && res.value){ rows.push(JSON.parse(res.value)); }
     }catch(e){ /* lewati entri yang gagal dibaca */ }
   }
 
-  const POIN_LEGACY = { emas:3, perak:2, perunggu:1 }; // untuk data lama yang belum punya field 'poin'
-  const map = {};
-  raw.forEach(r => {
-    const nama = r.kelompok || 'Tanpa nama';
-    if(!map[nama]) map[nama] = { kelompok:nama, poin:0, jumlahKasus:0, lencana:{emas:0,perak:0,perunggu:0}, terakhir:null };
-    const m = map[nama];
-    m.jumlahKasus += 1;
-    const poinKasus = typeof r.poin === 'number' ? r.poin : (POIN_LEGACY[r.lencana] || 0);
-    m.poin += poinKasus;
-    if(r.lencana && m.lencana[r.lencana] !== undefined) m.lencana[r.lencana] += 1;
-    const t = r.waktu ? new Date(r.waktu) : null;
-    if(t && (!m.terakhir || t < m.terakhir)) m.terakhir = t; // lebih cepat selesai menang saat seri
+  return rows.sort((a,b) => {
+    if((b.poin||0) !== (a.poin||0)) return (b.poin||0) - (a.poin||0);
+    if((b.benar||0) !== (a.benar||0)) return (b.benar||0) - (a.benar||0);
+    return new Date(a.terakhir||0) - new Date(b.terakhir||0); // lebih cepat menang saat seri
   });
-
-  return Object.values(map).sort((a,b) => {
-    if(b.poin !== a.poin) return b.poin - a.poin;
-    if(b.jumlahKasus !== a.jumlahKasus) return b.jumlahKasus - a.jumlahKasus;
-    return (a.terakhir||0) - (b.terakhir||0);
-  });
-}
-
-function badgeChips(lencana){
-  return ['emas','perak','perunggu']
-    .filter(t => lencana[t] > 0)
-    .map(t => '<span class="board-badge ' + t + '">' + t + ' &times;' + lencana[t] + '</span>')
-    .join('');
 }
 
 function appendBoardRow(rank, r){
@@ -1043,7 +1288,7 @@ function appendBoardRow(rank, r){
   row.innerHTML =
     '<span class="board-rank">#' + rank + '</span>' +
     '<span class="board-name">' + r.kelompok + '</span>' +
-    '<span class="board-badges">' + badgeChips(r.lencana) + '</span>' +
+    '<span class="board-badges">' + (r.benar||0) + ' soal benar</span>' +
     '<span class="board-points">' + r.poin + ' poin</span>';
   list.appendChild(row); // .board-list pakai column-reverse, jadi baris baru "naik" ke atas
 }
@@ -1118,56 +1363,7 @@ async function startReveal(){
   step();
 }
 
-const STATUS_HINT_DEFAULT = 'Hasil kelompok akan otomatis tersimpan ke Papan Peringkat begitu semua Uji Cepat terjawab benar.';
-
-/* ---------------- Storage jawaban ---------------- */
-function jawabanKey(){ return 'jawaban:' + slugKelas() + ':' + slugKelompok() + ':' + state.caseId; }
-
-async function loadJawaban(){
-  const st = document.getElementById('status-line');
-  st.textContent = STATUS_HINT_DEFAULT;
-  st.className = 'status-line';
-  try{
-    const res = await storage.get(jawabanKey());
-    if(res && res.value){
-      const data = JSON.parse(res.value);
-      st.textContent = 'Hasil ' + state.kelompok + ' sudah tersimpan ke Papan Peringkat (' + new Date(data.waktu).toLocaleTimeString() + ').';
-      st.className = 'status-line ok';
-    }
-  } catch(e){ /* belum ada jawaban tersimpan */ }
-}
-
-/* Dipanggil otomatis oleh checkEmblem() begitu kelompok mendapat lencana —
-   tidak lagi butuh tombol simpan manual, karena semua kelompok melihat
-   layar/proyektor yang sama. */
-async function simpanHasilOtomatis(){
-  const st = document.getElementById('status-line');
-  if(!state.kelompok) return;
-  const c = CASES[state.caseId];
-  const totalAttempts = Object.values((state.quiz && state.quiz.attempts) || {}).reduce((a,b) => a+b, 0);
-  const data = {
-    kelompok: state.kelompok,
-    kasus: state.caseId,
-    judulKasus: c ? c.judul : '',
-    lencana: (state.quiz && state.quiz.emblem) || '-',
-    poin: (state.quiz && typeof state.quiz.poin === 'number') ? state.quiz.poin : 0,
-    percobaanUjiCepat: totalAttempts,
-    waktu: new Date().toISOString(),
-  };
-  try{
-    const result = await storage.set(jawabanKey(), JSON.stringify(data));
-    if(result){
-      st.textContent = 'Hasil ' + state.kelompok + ' otomatis tersimpan ke Papan Peringkat.';
-      st.className = 'status-line ok';
-    } else {
-      st.textContent = 'Penyimpanan otomatis gagal, coba selesaikan ulang uji cepatnya.';
-      st.className = 'status-line err';
-    }
-  } catch(e){
-    st.textContent = 'Terjadi kendala saat menyimpan otomatis. Periksa penyimpanan browser.';
-    st.className = 'status-line err';
-  }
-}
+const STATUS_HINT_DEFAULT = 'Poin tiap kelompok otomatis tersimpan setelah tiap soal dijawab benar — hasil gabungannya baru terlihat di Papan Peringkat setelah semua kasus tuntas.';
 
 /* ---------------- Navigation ---------------- */
 function goTo(screen){
@@ -1175,7 +1371,7 @@ function goTo(screen){
   document.getElementById('screen-select').style.display = screen==='select' ? '' : 'none';
   document.getElementById('screen-case').style.display = screen==='case' ? '' : 'none';
   document.getElementById('screen-board').style.display = screen==='board' ? '' : 'none';
-  if(screen==='select'){ refreshSelectUI(); document.getElementById('kelas-line').textContent = state.kelas || ''; }
+  if(screen==='select'){ refreshSelectUI(); document.getElementById('kelas-line').textContent = state.kelas || ''; updateSelectProgress(); }
   if(screen==='case'){ renderCase(); }
   if(screen==='board'){ resetBoardScreen(); }
   window.scrollTo(0,0);
@@ -1197,6 +1393,7 @@ function initCoverKelas(){
 
 initCoverKelas();
 buildCaseGrids();
+document.getElementById('sound-toggle').textContent = soundOn ? '🔊' : '🔇';
 </script>
 </body>
 </html>
