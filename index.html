@@ -375,6 +375,7 @@ const CASES = {
     quick:[
       { prompt:'Pada baris 08.45 (Bu Sinta, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Pajak','Berkas Gaji','Berkas Kontrak'], answer:'Berkas Gaji' },
       { prompt:'Setelah seluruh log Kotak Arsip Merah ini dicatat, berkas apa yang MASIH tersisa di dalam kotak?', options:['Berkas Pajak','Berkas Gaji','Berkas Kontrak'], answer:'Berkas Pajak' },
+      { prompt:'Kotak Arsip Merah menerapkan aturan tumpukan (stack). Jika Berkas Gaji dimasukkan tepat sebelum diambil, berkas itu akan menjadi berkas yang...', options:['pertama diambil','terakhir diambil','tidak akan pernah diambil'], answer:'pertama diambil' },
     ],
   },
   'kantor-b': {
@@ -391,6 +392,8 @@ const CASES = {
     ],
     quick:[
       { prompt:'Pada baris 09.40 (Bu Citra, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Absensi','Berkas Surat Izin','Berkas Nilai Siswa'], answer:'Berkas Nilai Siswa' },
+      { prompt:'Setelah seluruh log Kotak Arsip Biru ini dicatat, berkas apa yang MASIH tersisa di dalam kotak?', options:['Berkas Absensi','Berkas Surat Izin','Berkas Nilai Siswa'], answer:'Berkas Absensi' },
+      { prompt:'Kotak Arsip Biru menerapkan aturan tumpukan (stack). Jika Berkas Nilai Siswa dimasukkan tepat sebelum diambil, berkas itu akan menjadi berkas yang...', options:['pertama diambil','terakhir diambil','tidak akan pernah diambil'], answer:'pertama diambil' },
     ],
   },
   'kantor-c': {
@@ -407,6 +410,8 @@ const CASES = {
     ],
     quick:[
       { prompt:'Pada baris 09.00 (Bu Ayu, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Inventaris','Berkas Proposal','Berkas Undangan'], answer:'Berkas Proposal' },
+      { prompt:'Setelah seluruh log Kotak Arsip Hijau ini dicatat, berkas apa yang MASIH tersisa di dalam kotak?', options:['Berkas Inventaris','Berkas Proposal','Berkas Undangan'], answer:'Berkas Inventaris' },
+      { prompt:'Kotak Arsip Hijau menerapkan aturan tumpukan (stack). Jika Berkas Proposal dimasukkan tepat sebelum diambil, berkas itu akan menjadi berkas yang...', options:['pertama diambil','terakhir diambil','tidak akan pernah diambil'], answer:'pertama diambil' },
     ],
   },
   'kantor-d': {
@@ -423,6 +428,8 @@ const CASES = {
     ],
     quick:[
       { prompt:'Pada baris 09.00 (Pak Gilang, POP), berkas apa yang seharusnya terambil menurut aturan LIFO?', options:['Berkas Cuti','Berkas Lembur','Berkas Reimburse'], answer:'Berkas Lembur' },
+      { prompt:'Setelah seluruh log Kotak Arsip Ungu ini dicatat, berkas apa yang MASIH tersisa di dalam kotak?', options:['Berkas Cuti','Berkas Lembur','Berkas Reimburse'], answer:'Berkas Cuti' },
+      { prompt:'Kotak Arsip Ungu menerapkan aturan tumpukan (stack). Jika Berkas Lembur dimasukkan tepat sebelum diambil, berkas itu akan menjadi berkas yang...', options:['pertama diambil','terakhir diambil','tidak akan pernah diambil'], answer:'pertama diambil' },
     ],
   },
   'rs-a': {
@@ -441,6 +448,7 @@ const CASES = {
     quick:[
       { prompt:'Pada DEQUEUE pukul 08.20, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Wati','Joko','Ratna'], answer:'Wati' },
       { prompt:'Menurut log resmi, siapa yang SEBENARNYA dipanggil pukul 08.20, padahal urutan itu melanggar aturan antrian?', options:['Wati','Joko','Ratna'], answer:'Joko' },
+      { prompt:'Tono adalah pasien yang tiba paling awal dalam antrian ini. Menurut aturan FIFO, pasien yang tiba paling awal seharusnya...', options:['dilayani paling awal','dilayani paling akhir','dilewati begitu saja'], answer:'dilayani paling awal' },
     ],
   },
   'rs-b': {
@@ -458,6 +466,8 @@ const CASES = {
     ],
     quick:[
       { prompt:'Pada DEQUEUE pukul 09.19, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Umar','Galih','Dewi'], answer:'Umar' },
+      { prompt:'Menurut log resmi, siapa yang SEBENARNYA dipanggil pukul 09.19, padahal urutan itu melanggar aturan antrian?', options:['Umar','Galih','Dewi'], answer:'Galih' },
+      { prompt:'Sari adalah pasien yang tiba paling awal dalam antrian ini. Menurut aturan FIFO, pasien yang tiba paling awal seharusnya...', options:['dilayani paling awal','dilayani paling akhir','dilewati begitu saja'], answer:'dilayani paling awal' },
     ],
   },
   'rs-c': {
@@ -475,6 +485,8 @@ const CASES = {
     ],
     quick:[
       { prompt:'Pada DEQUEUE pukul 10.17, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Puput','Sekar','Made'], answer:'Puput' },
+      { prompt:'Menurut log resmi, siapa yang SEBENARNYA dipanggil pukul 10.17, padahal urutan itu melanggar aturan antrian?', options:['Puput','Sekar','Made'], answer:'Sekar' },
+      { prompt:'Anton adalah pasien yang tiba paling awal dalam antrian ini. Menurut aturan FIFO, pasien yang tiba paling awal seharusnya...', options:['dilayani paling awal','dilayani paling akhir','dilewati begitu saja'], answer:'dilayani paling awal' },
     ],
   },
   'rs-d': {
@@ -492,6 +504,8 @@ const CASES = {
     ],
     quick:[
       { prompt:'Pada DEQUEUE pukul 11.20, siapa yang SEHARUSNYA dipanggil menurut aturan FIFO?', options:['Intan','Cinta','Rendra'], answer:'Intan' },
+      { prompt:'Menurut log resmi, siapa yang SEBENARNYA dipanggil pukul 11.20, padahal urutan itu melanggar aturan antrian?', options:['Intan','Cinta','Rendra'], answer:'Cinta' },
+      { prompt:'Yoga adalah pasien yang tiba paling awal dalam antrian ini. Menurut aturan FIFO, pasien yang tiba paling awal seharusnya...', options:['dilayani paling awal','dilayani paling akhir','dilewati begitu saja'], answer:'dilayani paling awal' },
     ],
   },
   'sekolah-a': {
@@ -505,6 +519,8 @@ const CASES = {
     kejadian:'Saat istirahat kedua, tas Fajar diperiksa lebih dulu, disusul tas Nadia. Namun uang kas ternyata berada di tas Rio, dan seorang siswa mengaku sempat melihat isi tas Rio sudah terbuka lebih awal, padahal posisinya di paling bawah tumpukan.',
     quick:[
       { prompt:'Tas mana yang janggal karena disebut sudah terbuka lebih awal, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Rio','Tas Nadia','Tas Fajar'], answer:'Tas Rio' },
+      { prompt:'HP siapa yang akan diambil PALING PERTAMA dari kotak titipan sesuai aturan antrian (FIFO)?', options:['HP Ica','HP Bayu'], answer:'HP Ica' },
+      { prompt:'Tas Rio diletakkan PALING AWAL (paling bawah tumpukan). Menurut aturan tumpukan, tas yang diletakkan paling awal akan menjadi tas yang...', options:['diperiksa paling akhir','diperiksa paling awal','tidak pernah diperiksa'], answer:'diperiksa paling akhir' },
     ],
   },
   'sekolah-b': {
@@ -518,6 +534,8 @@ const CASES = {
     kejadian:'Uang kas kelas disimpan di tas Wisnu. Saat digeledah, tas Doni dan Lina diperiksa lebih dulu sesuai urutan tumpukan, tapi ada laporan bahwa tas Wisnu sudah terbuka duluan sebelum dua tas di atasnya diperiksa.',
     quick:[
       { prompt:'Tas mana yang janggal karena disebut sudah terbuka duluan, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Wisnu','Tas Lina','Tas Doni'], answer:'Tas Wisnu' },
+      { prompt:'HP siapa yang akan diambil PALING PERTAMA dari kotak titipan sesuai aturan antrian (FIFO)?', options:['HP Sasa','HP Rehan'], answer:'HP Sasa' },
+      { prompt:'Tas Wisnu diletakkan PALING AWAL (paling bawah tumpukan). Menurut aturan tumpukan, tas yang diletakkan paling awal akan menjadi tas yang...', options:['diperiksa paling akhir','diperiksa paling awal','tidak pernah diperiksa'], answer:'diperiksa paling akhir' },
     ],
   },
   'sekolah-c': {
@@ -531,6 +549,8 @@ const CASES = {
     kejadian:'Uang kas ada di dalam tas Egi. Sesuai aturan tumpukan, tas Anggun diperiksa duluan, lalu Putri. Tapi seseorang mengaku sudah melihat isi tas Egi lebih dulu, padahal seharusnya belum bisa diakses karena masih ada dua tas di atasnya.',
     quick:[
       { prompt:'Tas mana yang janggal karena disebut sudah dilihat isinya lebih dulu, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Egi','Tas Putri','Tas Anggun'], answer:'Tas Egi' },
+      { prompt:'HP siapa yang akan diambil PALING PERTAMA dari kotak titipan sesuai aturan antrian (FIFO)?', options:['HP Zaki','HP Vina'], answer:'HP Zaki' },
+      { prompt:'Tas Egi diletakkan PALING AWAL (paling bawah tumpukan). Menurut aturan tumpukan, tas yang diletakkan paling awal akan menjadi tas yang...', options:['diperiksa paling akhir','diperiksa paling awal','tidak pernah diperiksa'], answer:'diperiksa paling akhir' },
     ],
   },
   'sekolah-d': {
@@ -544,6 +564,8 @@ const CASES = {
     kejadian:'Uang kas ada di dalam tas Hasan. Sesuai aturan tumpukan, tas Ojan diperiksa duluan, lalu Mira. Tapi seorang siswa mengaku sudah melihat isi tas Hasan lebih dulu, padahal seharusnya belum bisa diakses karena masih ada dua tas di atasnya.',
     quick:[
       { prompt:'Tas mana yang janggal karena disebut sudah dilihat isinya lebih dulu, padahal menurut aturan tumpukan seharusnya belum bisa diakses?', options:['Tas Hasan','Tas Mira','Tas Ojan'], answer:'Tas Hasan' },
+      { prompt:'HP siapa yang akan diambil PALING PERTAMA dari kotak titipan sesuai aturan antrian (FIFO)?', options:['HP Tia','HP Rafi'], answer:'HP Tia' },
+      { prompt:'Tas Hasan diletakkan PALING AWAL (paling bawah tumpukan). Menurut aturan tumpukan, tas yang diletakkan paling awal akan menjadi tas yang...', options:['diperiksa paling akhir','diperiksa paling awal','tidak pernah diperiksa'], answer:'diperiksa paling akhir' },
     ],
   },
   'bonus': {
@@ -558,6 +580,8 @@ const CASES = {
     quick:[
       { prompt:'Pada POP pertama di Rak A, barang apa yang seharusnya terambil?', options:['Kotak 1','Kotak 2','Kotak 3'], answer:'Kotak 3' },
       { prompt:'Pada DEQUEUE pertama di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Pelanggan 1','Pelanggan 2','Pelanggan 3'], answer:'Pelanggan 1' },
+      { prompt:'Pada POP kedua di Rak A, barang apa yang seharusnya terambil?', options:['Kotak 1','Kotak 2','Kotak 4'], answer:'Kotak 4' },
+      { prompt:'Pada DEQUEUE kedua di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Pelanggan 2','Pelanggan 3','Pelanggan 4'], answer:'Pelanggan 2' },
     ],
   },
   'bonus-b': {
@@ -572,6 +596,8 @@ const CASES = {
     quick:[
       { prompt:'Pada POP pertama di Rak B, barang apa yang seharusnya terambil?', options:['Dus B','Dus C','Dus D'], answer:'Dus D' },
       { prompt:'Pada DEQUEUE pertama di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Bu Wati','Pak Anwar','Bu Lastri'], answer:'Bu Wati' },
+      { prompt:'Pada POP kedua di Rak B, barang apa yang seharusnya terambil?', options:['Dus A','Dus B','Dus C'], answer:'Dus C' },
+      { prompt:'Pada DEQUEUE kedua di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Pak Anwar','Bu Lastri','Pak Ujang'], answer:'Pak Anwar' },
     ],
   },
   'bonus-c': {
@@ -586,6 +612,8 @@ const CASES = {
     quick:[
       { prompt:'Pada POP kedua di Rak C, barang apa yang seharusnya terambil?', options:['Peti 2','Peti 3','Peti 4'], answer:'Peti 4' },
       { prompt:'Pada DEQUEUE kedua di daftar Pesanan, pelanggan mana yang seharusnya dikirim?', options:['Toko Sentosa','Toko Barokah','Toko Damai'], answer:'Toko Sentosa' },
+      { prompt:'Pada POP pertama di Rak C, barang apa yang seharusnya terambil?', options:['Peti 1','Peti 2','Peti 3'], answer:'Peti 2' },
+      { prompt:'Pada DEQUEUE pertama di daftar Pesanan Gudang C, pelanggan mana yang seharusnya dikirim?', options:['Toko Maju','Toko Sentosa','Toko Barokah'], answer:'Toko Maju' },
     ],
   },
 };
